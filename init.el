@@ -58,19 +58,64 @@
 (global-set-key (kbd "C-x <up>")    'windmove-up)
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 
+(define-key global-map (kbd "C-c <left>") 'split-window-horizontally)
+(define-key global-map (kbd "C-c <right>") 'split-window-horizontally)
+(define-key global-map (kbd "C-c <up>") 'split-window-vertically)
+(define-key global-map (kbd "C-c <down>") 'split-window-vertically)
+
 ;; Share Clipboard
 (setq x-select-enable-clipboard t)
-(custom-set-variables)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+	("4020c1449293512850824de75244ade2d2abfc2284854a6e95205b4ae6c84035" default)))
+ '(package-selected-packages
+   (quote
+	(atom-dark-theme neotree markdown-mode auto-complete))))
 
 ;; Markdown Mode
 (setq x-select-enable-clipboard t)
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 
 ;; color theme
-(load-theme 'wombat t)
+;; (load-theme 'wombat t)
+
+;; hide menu bar
+(menu-bar-mode -1)
 
 ;; enable neotree
 (require 'neotree)
 (neotree)
+(setq neo-show-hidden-files t)
+;;(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+;; )
 
 
+;;(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+;; '(highlight ((t (:background "cyan" :foreground "#ffffff" :underline t))))
+;; '(region ((t (:background "cyan" :foreground "#f6f3e8")))))
+
+
+(unless (package-installed-p 'atom-one-dark-theme)
+  (package-refresh-contents) (package-install 'atom-one-dark-theme))
+
+(load-theme 'atom-one-dark t)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "color-235" :foreground "#ABB2BF" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default"))))
+ '(linum ((t (:background "color-235" :foreground "#666D7A")))))
