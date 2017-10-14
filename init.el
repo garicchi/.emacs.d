@@ -1,5 +1,6 @@
 ;; set japanese
 (set-language-environment "Japanese")
+(prefer-coding-system 'utf-8)
 
 ;; set tab width
 (setq-default tab-width 4)
@@ -42,7 +43,9 @@
 (package-initialize)
 
 ;; Auto Complete
-(require 'auto-complete-config)
+(unless (package-installed-p 'auto-complete)
+  (package-refresh-contents) (package-install 'auto-complete))
+
 (ac-config-default)
 (add-to-list 'ac-modes 'text-mode)         ;; text-modeでも自動的に有効にする
 (add-to-list 'ac-modes 'fundamental-mode)  ;; fundamental-mode
@@ -88,28 +91,19 @@
 (menu-bar-mode -1)
 
 ;; enable neotree
-(require 'neotree)
-(neotree)
+(unless (package-installed-p 'neotree)
+  (package-refresh-contents) (package-install 'neotree))
+
 (setq neo-show-hidden-files t)
-;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; )
-
-
-;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; '(highlight ((t (:background "cyan" :foreground "#ffffff" :underline t))))
-;; '(region ((t (:background "cyan" :foreground "#f6f3e8")))))
+(neotree)
 
 
 (unless (package-installed-p 'atom-one-dark-theme)
   (package-refresh-contents) (package-install 'atom-one-dark-theme))
+
+(unless (package-installed-p 'flycheck)
+  (package-refresh-contents) (package-install 'flycheck))
+
 
 (load-theme 'atom-one-dark t)
 (custom-set-faces
