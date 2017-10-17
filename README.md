@@ -8,7 +8,7 @@ git clone https://github.com/garicchi/.emacs.d.git
 ## PACKAGES
 |name|description|
 |:---:|:---:|
-|package.elmelpa等のパッケージを使うやつ|
+|package.el|melpa等のパッケージを使うやつ|
 |auto-complete|コードの自動補完をしてくれるやつ|
 |atom-dark-theme|atomっぽい配色テーマ|
 |neotree|左側にディレクトリツリーを表示してくれる|
