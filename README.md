@@ -14,6 +14,8 @@ git clone https://github.com/garicchi/.emacs.d.git
 |neotree|左側にディレクトリツリーを表示してくれる|
 |flycheck|ソースコードのエラーをチェックしてくれる|
 |web-mode|html内に埋め込まれたjsやcssをハイライトしてくれる|
+|powerline|バッファーをいい感じに|
+|all-the-icons|neotreeのアイコンをいい感じに|
 
 ## FOR MAC OS
 システム設定から```キーボード```→```ショートカット```→```入ソース```→```前の入力ソースを選択```のチェックをはずす

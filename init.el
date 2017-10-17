@@ -81,6 +81,8 @@
 (unless (package-installed-p 'neotree)
   (package-refresh-contents) (package-install 'neotree))
 
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+
 (setq neo-show-hidden-files t)
 (neotree)
 
@@ -94,6 +96,23 @@
 
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
+
+;; powerline
+(unless (package-installed-p 'powerline)
+  (package-refresh-contents) (package-install 'powerline))
+(powerline-default-theme)
+
+;; all-the-icons
+(unless (package-installed-p 'all-the-icons)
+  (package-refresh-contents)
+  (package-install 'all-the-icons)
+  (all-the-icons-install-fonts)
+  )
+
+
+
+;; ---------------------------------------------------------------------------
+
 
 ;;
 ;;     キーバインド設定
@@ -113,11 +132,30 @@
 ;;     カラーテーマ設定
 ;;
 
-(unless (package-installed-p 'atom-one-dark-theme)
-  (package-refresh-contents) (package-install 'atom-one-dark-theme))
+;;(unless (package-installed-p 'atom-one-dark-theme)
+;;  (package-refresh-contents) (package-install 'atom-one-dark-theme))
+;;
+;;(load-theme 'atom-one-dark t)
+;;(custom-set-faces
+;;
+;; '(default ((t (:inherit nil :stipple nil :background "color-235" :foreground "#ABB2BF" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default"))))
+;; '(linum ((t (:background "color-235" :foreground "#666D7A")))))
 
-(load-theme 'atom-one-dark t)
+(unless (package-installed-p 'monokai-theme)                  
+  (package-refresh-contents) (package-install 'monokai-theme))
+
+(load-theme 'monokai t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+	(spaceline-all-the-icons web-mode powerline neotree monokai-theme markdown-mode flycheck auto-complete atom-one-dark-theme atom-dark-theme all-the-icons))))
 (custom-set-faces
-
- '(default ((t (:inherit nil :stipple nil :background "color-235" :foreground "#ABB2BF" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default"))))
- '(linum ((t (:background "color-235" :foreground "#666D7A")))))
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
