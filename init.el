@@ -49,6 +49,13 @@
 ;; Markdown Modeの有効化
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 
+;; はみ出した表示をウインドウの右端で折り返さない
+(setq-default truncate-lines t)
+(setq-default truncate-partial-width-windows t)
+
+;; バッファが外部から変更されたときに自動で再読込
+(global-auto-revert-mode 1)
+
 ;; MacのoptionきーをMetaキーに割り当てる
 (setq mac-option-modifier 'meta)
 
