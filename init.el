@@ -123,10 +123,12 @@
 (global-set-key (kbd "C-x <up>")    'windmove-up)
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 
-(define-key global-map (kbd "C-c <left>") 'split-window-horizontally)
-(define-key global-map (kbd "C-c <right>") 'split-window-horizontally)
-(define-key global-map (kbd "C-c <up>") 'split-window-vertically)
-(define-key global-map (kbd "C-c <down>") 'split-window-vertically)
+(global-set-key (kbd "C-c <left>") 'split-window-horizontally)
+(global-set-key (kbd "C-c <right>") 'split-window-horizontally)
+(global-set-key (kbd "C-c <up>") 'split-window-vertically)
+(global-set-key (kbd "C-c <down>") 'split-window-vertically)
+
+(global-set-key (kbd "C-q") 'kill-ring-save)
 
 ;;
 ;;     カラーテーマ設定
