@@ -2,6 +2,7 @@
 
 ## INSTALL
 ```sh
+cd ~
 git clone https://github.com/garicchi/.emacs.d.git
 ```
 
