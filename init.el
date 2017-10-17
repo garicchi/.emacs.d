@@ -63,6 +63,11 @@
 ;;     パッケージ設定
 ;;
 
+;; emacsが自動的に生成する設定を別ファイルに
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 ;; package.elを有効化
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
@@ -97,6 +102,8 @@
 (unless (package-installed-p 'flycheck)
   (package-refresh-contents) (package-install 'flycheck))
 
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
 ;; web-mode
 (unless (package-installed-p 'web-mode)
   (package-refresh-contents) (package-install 'web-mode))
@@ -107,6 +114,15 @@
 ;; powerline
 (unless (package-installed-p 'powerline)
   (package-refresh-contents) (package-install 'powerline))
+
+(custom-set-faces
+ '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 120))))
+ '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#424242" :box nil :height 120))))
+ '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#424242" :box nil :height 120))))
+ '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 120))))
+ '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 120))))
+ )
+
 (powerline-default-theme)
 
 ;; all-the-icons
@@ -115,10 +131,6 @@
   (package-install 'all-the-icons)
   (all-the-icons-install-fonts)
   )
-
-
-
-;; ---------------------------------------------------------------------------
 
 
 ;;
@@ -134,8 +146,6 @@
 (global-set-key (kbd "C-c <right>") 'split-window-horizontally)
 (global-set-key (kbd "C-c <up>") 'split-window-vertically)
 (global-set-key (kbd "C-c <down>") 'split-window-vertically)
-
-(global-set-key (kbd "C-q") 'kill-ring-save)
 
 ;;
 ;;     カラーテーマ設定
@@ -154,17 +164,3 @@
   (package-refresh-contents) (package-install 'monokai-theme))
 
 (load-theme 'monokai t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-	(spaceline-all-the-icons web-mode powerline neotree monokai-theme markdown-mode flycheck auto-complete atom-one-dark-theme atom-dark-theme all-the-icons))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
