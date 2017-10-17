@@ -6,6 +6,13 @@
 (setq-default tab-width 4)
 (setq default-tab-width 4)
 
+;; hide menu bar
+(menu-bar-mode -1)
+
+;; hide tool bar
+(tool-bar-mode 0)
+
+
 ;; do not show startup message
 (setq inhibit-startup-message t)
 
@@ -87,8 +94,7 @@
 ;; color theme
 ;; (load-theme 'wombat t)
 
-;; hide menu bar
-(menu-bar-mode -1)
+
 
 ;; enable neotree
 (unless (package-installed-p 'neotree)
@@ -103,6 +109,12 @@
 
 (unless (package-installed-p 'flycheck)
   (package-refresh-contents) (package-install 'flycheck))
+
+(unless (package-installed-p 'web-mode)
+  (package-refresh-contents) (package-install 'web-mode))
+
+(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
 
 (load-theme 'atom-one-dark t)

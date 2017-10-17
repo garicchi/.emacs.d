@@ -2,14 +2,7 @@
 
 ## INSTALL
 ```sh
-M-x package-list-pakcage
-# press [i] and select berow
-
-# markdown-mode
-# auto-complete
-# neotree
-
-# press [x] to install
+git clone https://github.com/garicchi/.emacs.d.git
 ```
 
 ## FOR MAC OS
