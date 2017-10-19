@@ -50,13 +50,13 @@
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 
 ;; はみ出した表示をウインドウの右端で折り返さない
-(setq-default truncate-lines t)
-(setq-default truncate-partial-width-windows t)
+;; (setq-default truncate-lines t)
+;; (setq-default truncate-partial-width-windows t)
 
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
 
-;; MacのoptionきーをMetaキーに割り当てる
+;; MacのoptionキーをMetaキーに割り当てる
 (setq mac-option-modifier 'meta)
 
 ;;
@@ -116,11 +116,11 @@
   (package-refresh-contents) (package-install 'powerline))
 
 (custom-set-faces
- '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 120))))
- '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#424242" :box nil :height 120))))
- '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#424242" :box nil :height 120))))
- '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 120))))
- '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 120))))
+ '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 130))))
+ '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 130))))
+ '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 130))))
+ '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 130))))
+ '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 130))))
  )
 
 (powerline-default-theme)
