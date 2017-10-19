@@ -89,6 +89,13 @@
 (setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
 (setq ac-use-fuzzy t)          ;; 曖昧マッチ
 
+;; all-the-icons
+(unless (package-installed-p 'all-the-icons)
+  (package-refresh-contents)
+  (package-install 'all-the-icons)
+  (all-the-icons-install-fonts)
+  )
+
 ;; neotree
 (unless (package-installed-p 'neotree)
   (package-refresh-contents) (package-install 'neotree))
@@ -125,12 +132,6 @@
 
 (powerline-default-theme)
 
-;; all-the-icons
-(unless (package-installed-p 'all-the-icons)
-  (package-refresh-contents)
-  (package-install 'all-the-icons)
-  (all-the-icons-install-fonts)
-  )
 
 
 ;;
