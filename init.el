@@ -132,6 +132,10 @@
 
 (powerline-default-theme)
 
+;; multi-term
+(unless (package-installed-p 'multi-term)
+  (package-refresh-contents) (package-install 'multi-term))
+(setq multi-term-program shell-file-name)
 
 
 ;;
@@ -147,6 +151,44 @@
 (global-set-key (kbd "C-c <right>") 'split-window-horizontally)
 (global-set-key (kbd "C-c <up>") 'split-window-vertically)
 (global-set-key (kbd "C-c <down>") 'split-window-vertically)
+
+(global-set-key (kbd "C-q") 'copy-region-as-kill)
+
+
+;; バッファリストを別ウインドウで開かないようにする
+(global-set-key (kbd "C-x C-b") 'buffer-menu)
+
+;; ウインドウをリサイズできるようにする
+(defun window-resizer ()
+  "Control window size and position."
+  (interactive)
+  (let ((window-obj (selected-window))
+        (current-width (window-width))
+        (current-height (window-height))
+        (dx (if (= (nth 0 (window-edges)) 0) 1
+              -1))
+        (dy (if (= (nth 1 (window-edges)) 0) 1
+              -1))
+        c)
+    (catch 'end-flag
+      (while t
+        (message "size[%dx%d]"
+                 (window-width) (window-height))
+        (setq c (read-char))
+        (cond ((= c ?l)
+               (enlarge-window-horizontally dx))
+              ((= c ?h)
+               (shrink-window-horizontally dx))
+              ((= c ?j)
+               (enlarge-window dy))
+              ((= c ?k)
+               (shrink-window dy))
+              ;; otherwise
+              (t
+               (message "Quit")
+               (throw 'end-flag t)))))))
+
+(global-set-key (kbd "C-x r") 'window-resizer)
 
 ;;
 ;;     カラーテーマ設定
