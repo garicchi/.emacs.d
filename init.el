@@ -123,11 +123,11 @@
   (package-refresh-contents) (package-install 'powerline))
 
 (custom-set-faces
- '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 130))))
- '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 130))))
- '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 130))))
- '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 130))))
- '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 130))))
+ '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
+ '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
+ '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
+ '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
+ '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 140))))
  )
 
 (powerline-default-theme)
@@ -200,8 +200,6 @@
 ;;(load-theme 'atom-one-dark t)
 ;;(custom-set-faces
 ;;
-;; '(default ((t (:inherit nil :stipple nil :background "color-235" :foreground "#ABB2BF" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default"))))
-;; '(linum ((t (:background "color-235" :foreground "#666D7A")))))
 
 (unless (package-installed-p 'monokai-theme)                  
   (package-refresh-contents) (package-install 'monokai-theme))
