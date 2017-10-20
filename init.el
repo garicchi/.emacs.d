@@ -59,6 +59,9 @@
 ;; MacのoptionキーをMetaキーに割り当てる
 (setq mac-option-modifier 'meta)
 
+;; 背景を透過する
+(set-frame-parameter nil 'alpha 95 )
+
 ;;
 ;;     パッケージ設定
 ;;
