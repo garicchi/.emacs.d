@@ -62,6 +62,24 @@
 ;; 背景を透過する
 (set-frame-parameter nil 'alpha 95 )
 
+;; 起動時のフレーム設定
+(setq initial-frame-alist
+   (append (list
+      '(top . 0)
+      '(left . 0)
+      '(width . 200)
+      '(height . 60)
+	  )
+	  initial-frame-alist
+	  )
+   )
+(setq default-frame-alist initial-frame-alist)
+
+;; 起動時に分割
+(setq w (selected-window))
+(setq w2 (split-window w nil t))
+(setq w3 (split-window w2 nil))
+
 ;;
 ;;     パッケージ設定
 ;;
@@ -77,6 +95,12 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
+
+;; multi-term
+(unless (package-installed-p 'multi-term)
+  (package-refresh-contents) (package-install 'multi-term))
+(setq multi-term-program shell-file-name)
+
 
 ;; auto-complete.el
 (unless (package-installed-p 'auto-complete)
@@ -135,10 +159,6 @@
 
 (powerline-default-theme)
 
-;; multi-term
-(unless (package-installed-p 'multi-term)
-  (package-refresh-contents) (package-install 'multi-term))
-(setq multi-term-program shell-file-name)
 
 ;; anything
 (unless (package-installed-p 'anything)
@@ -164,6 +184,11 @@
 (require 'undo-tree)
 (global-undo-tree-mode t)
 
+(unless (package-installed-p 'smooth-scroll)
+  (package-refresh-contents) (package-install 'smooth-scroll))
+(require 'smooth-scroll)
+(smooth-scroll-mode t)
+
 ;;
 ;;     キーバインド設定
 ;;
@@ -181,7 +206,7 @@
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
 
-(global-set-key (kbd "M-x") 'anything)
+(global-set-key (kbd "M-a") 'anything)
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
@@ -217,6 +242,7 @@
                (throw 'end-flag t)))))))
 
 (global-set-key (kbd "C-x r") 'window-resizer)
+
 
 ;;
 ;;     カラーテーマ設定
