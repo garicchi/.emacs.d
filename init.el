@@ -181,6 +181,7 @@
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
 
+(global-set-key (kbd "M-x") 'anything)
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
