@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(multi-term web-mode spaceline-all-the-icons neotree monokai-theme markdown-mode flycheck auto-complete atom-one-dark-theme atom-dark-theme))))
+	(undo-tree anything multi-term web-mode spaceline-all-the-icons neotree monokai-theme markdown-mode flycheck auto-complete atom-one-dark-theme atom-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -140,6 +140,29 @@
   (package-refresh-contents) (package-install 'multi-term))
 (setq multi-term-program shell-file-name)
 
+;; anything
+(unless (package-installed-p 'anything)
+  (package-refresh-contents) (package-install 'anything))
+
+(require 'anything)
+(require 'anything-startup)
+(require 'anything-config)
+
+(setq anything-sources
+      '(anything-c-source-buffers+
+	anything-c-source-recentf
+	anything-c-source-emacs-commands
+	anything-c-source-emacs-functions
+	anything-c-source-files-in-current-dir
+	anything-c-source-colors
+	anything-c-source-man-pages
+	))
+
+;; undo-tree
+(unless (package-installed-p 'undo-tree)
+  (package-refresh-contents) (package-install 'undo-tree))
+(require 'undo-tree)
+(global-undo-tree-mode t)
 
 ;;
 ;;     キーバインド設定
@@ -156,6 +179,7 @@
 (global-set-key (kbd "C-c <down>") 'split-window-vertically)
 
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
+;; (global-set-key (kbd "C-r") 'yank)
 
 
 ;; バッファリストを別ウインドウで開かないようにする
