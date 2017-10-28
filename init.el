@@ -193,16 +193,16 @@
 ;;
 
 ;; ウインドウ移動
-(global-set-key (kbd "M-<left>")  'windmove-left)
-(global-set-key (kbd "M-<down>")  'windmove-down)
-(global-set-key (kbd "M-<up>")    'windmove-up)
-(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "C-<left>")  'windmove-left)
+(global-set-key (kbd "C-<down>")  'windmove-down)
+(global-set-key (kbd "C-<up>")    'windmove-up)
+(global-set-key (kbd "C-<right>") 'windmove-right)
 
 ;; ウインドウ分割
-(global-set-key (kbd "C-x <left>") 'split-window-horizontally)
-(global-set-key (kbd "C-x <right>") 'split-window-horizontally)
-(global-set-key (kbd "C-x <up>") 'split-window-vertically)
-(global-set-key (kbd "C-x <down>") 'split-window-vertically)
+(global-set-key (kbd "M-<left>") 'split-window-horizontally)
+(global-set-key (kbd "M-<right>") 'split-window-horizontally)
+(global-set-key (kbd "M-<up>") 'split-window-vertically)
+(global-set-key (kbd "M-<down>") 'split-window-vertically)
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
@@ -214,6 +214,10 @@
 ;; anything
 (global-set-key (kbd "M-a") 'anything)
 
+(global-set-key (kbd "C-,") 'scroll-up)
+(global-set-key (kbd "C-.") 'scroll-down)
+
+
 ;; バッファの末尾と最初に移動
 (global-set-key (kbd "M-,") 'beginning-of-buffer)
 (global-set-key (kbd "M-.") 'end-of-buffer)
@@ -223,8 +227,8 @@
 (global-set-key (kbd "C-k") 'backward-char)
 
 ;; バッファリスト
-(global-set-key (kbd "C-b") 'buffer-menu)
-(global-set-key (kbd "M-b") 'switch-to-buffer)
+(global-set-key (kbd "C-<tab>") 'buffer-menu)
+;; (global-set-key (kbd "M-<tab>") 'switch-to-buffer)
 
 ;; multi-term
 (global-set-key (kbd "C-t") 'multi-term)
