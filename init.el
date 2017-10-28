@@ -83,7 +83,6 @@
 ;;
 ;;     パッケージ設定
 ;;
-
 ;; emacsが自動的に生成する設定を別ファイルに
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -193,20 +192,42 @@
 ;;     キーバインド設定
 ;;
 
-(global-set-key (kbd "C-x <left>")  'windmove-left)
-(global-set-key (kbd "C-x <down>")  'windmove-down)
-(global-set-key (kbd "C-x <up>")    'windmove-up)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
+;; ウインドウ移動
+(global-set-key (kbd "M-<left>")  'windmove-left)
+(global-set-key (kbd "M-<down>")  'windmove-down)
+(global-set-key (kbd "M-<up>")    'windmove-up)
+(global-set-key (kbd "M-<right>") 'windmove-right)
 
-(global-set-key (kbd "C-c <left>") 'split-window-horizontally)
-(global-set-key (kbd "C-c <right>") 'split-window-horizontally)
-(global-set-key (kbd "C-c <up>") 'split-window-vertically)
-(global-set-key (kbd "C-c <down>") 'split-window-vertically)
+;; ウインドウ分割
+(global-set-key (kbd "C-x <left>") 'split-window-horizontally)
+(global-set-key (kbd "C-x <right>") 'split-window-horizontally)
+(global-set-key (kbd "C-x <up>") 'split-window-vertically)
+(global-set-key (kbd "C-x <down>") 'split-window-vertically)
 
+;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
 
+;; 置換
+(global-set-key (kbd "M-s") 'query-replace)
+
+;; anything
 (global-set-key (kbd "M-a") 'anything)
+
+;; バッファの末尾と最初に移動
+(global-set-key (kbd "M-,") 'beginning-of-buffer)
+(global-set-key (kbd "M-.") 'end-of-buffer)
+
+;; カーソル移動コマンド
+(global-set-key (kbd "C-l") 'forward-char)
+(global-set-key (kbd "C-k") 'backward-char)
+
+;; バッファリスト
+(global-set-key (kbd "C-b") 'buffer-menu)
+(global-set-key (kbd "M-b") 'switch-to-buffer)
+
+;; multi-term
+(global-set-key (kbd "C-t") 'multi-term)
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
