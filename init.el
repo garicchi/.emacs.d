@@ -144,6 +144,14 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
+;; json-mode
+(unless (package-installed-p 'json-mode)
+  (package-refresh-contents) (package-install 'json-mode))
+
+(require 'json-mode)
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+
+
 ;; powerline
 (unless (package-installed-p 'powerline)
   (package-refresh-contents) (package-install 'powerline))
