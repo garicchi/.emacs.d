@@ -49,6 +49,8 @@
 ;; Markdown Modeの有効化
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 
+(setq markdown-command "/usr/local/bin/multimarkdown")
+
 ;; はみ出した表示をウインドウの右端で折り返さない
 ;; (setq-default truncate-lines t)
 ;; (setq-default truncate-partial-width-windows t)
@@ -76,9 +78,9 @@
 (setq default-frame-alist initial-frame-alist)
 
 ;; 起動時に分割
-(setq w (selected-window))
-(setq w2 (split-window w nil t))
-(setq w3 (split-window w2 nil))
+;;(setq w (selected-window))
+;;(setq w2 (split-window w nil t))
+;;(setq w3 (split-window w2 nil))
 
 ;;
 ;;     パッケージ設定
@@ -187,6 +189,7 @@
   (package-refresh-contents) (package-install 'smooth-scroll))
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
+
 
 ;;
 ;;     キーバインド設定
