@@ -113,6 +113,7 @@
 (add-to-list 'ac-modes 'fundamental-mode) 
 (add-to-list 'ac-modes 'org-mode)
 (add-to-list 'ac-modes 'yatex-mode)
+(add-to-list 'ac-modes 'go-mode)
 (ac-set-trigger-key "TAB")
 (setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
 (setq ac-use-fuzzy t)          ;; 曖昧マッチ
@@ -143,8 +144,17 @@
 (unless (package-installed-p 'web-mode)
   (package-refresh-contents) (package-install 'web-mode))
 
+;; web-mode
+(unless (package-installed-p 'web-mode)
+  (package-refresh-contents) (package-install 'web-mode))
+
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
+
+;; web-mode
+(unless (package-installed-p 'go-mode)
+  (package-refresh-contents) (package-install 'go-mode))
+
 
 ;; powerline
 (unless (package-installed-p 'powerline)

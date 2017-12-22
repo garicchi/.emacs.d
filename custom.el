@@ -1,11 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-	(elpy jedi smooth-scroll undo-tree anything multi-term web-mode spaceline-all-the-icons neotree monokai-theme markdown-mode flycheck auto-complete atom-one-dark-theme atom-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -45,3 +37,11 @@
  '(web-mode-keyword-face ((t (:foreground "#cc8fa3"))))
  '(web-mode-symbol-face ((t (:foreground "#c28fcc"))))
  '(web-mode-variable-name-face ((t (:foreground "#f2bb61")))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+	(go-mode web-mode undo-tree spaceline-all-the-icons smooth-scroll neotree multi-term monokai-theme markdown-mode jedi flycheck elpy atom-one-dark-theme atom-dark-theme anything))))
