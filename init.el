@@ -151,9 +151,15 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
-;; web-mode
+;; go-mode
 (unless (package-installed-p 'go-mode)
   (package-refresh-contents) (package-install 'go-mode))
+
+(with-eval-after-load 'go-mode
+  ;; auto-complete
+  (unless (package-installed-p 'go-autocomplete)
+	(package-refresh-contents) (package-install 'go-autocomplete))
+ )
 
 
 ;; powerline

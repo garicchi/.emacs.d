@@ -16,6 +16,7 @@
  '(font-lock-variable-name-face ((t (:foreground "#c28fcc"))))
  '(fringe ((t (:background "#333333" :foreground "#dddddd"))))
  '(linum ((t (:inherit default :background "#333333" :foreground "#dddddd" :underline nil))))
+ '(markdown-pre-face ((t (:inherit (markdown-code-face default)))))
  '(mode-line ((t (:foreground "#f9f9f9" :background "#bdbdbd" :box nil :height 140))))
  '(mode-line-active ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
