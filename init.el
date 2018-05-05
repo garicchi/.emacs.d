@@ -1,7 +1,7 @@
 ;;
 ;;      共通設定
 ;;
-
+(add-to-list 'load-path "elisp")
 ;; 日本語設定
 (set-language-environment "Japanese")
 ;; UTF-8設定
@@ -65,17 +65,17 @@
 (set-frame-parameter nil 'alpha 95 )
 
 ;; 起動時のフレーム設定
-(setq initial-frame-alist
-   (append (list
-      '(top . 0)
-      '(left . 0)
-      '(width . 200)
-      '(height . 60)
-	  )
-	  initial-frame-alist
-	  )
-   )
-(setq default-frame-alist initial-frame-alist)
+;;(setq initial-frame-alist
+;;   (append (list
+;;      '(top . 0)
+;;      '(left . 0)
+;;      '(width . 200)
+;;      '(height . 60)
+;;	  )
+;;	  initial-frame-alist
+;;	  )
+;;   )
+;;(setq default-frame-alist initial-frame-alist)
 
 ;; 起動時に分割
 ;;(setq w (selected-window))
