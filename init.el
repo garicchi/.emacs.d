@@ -22,6 +22,7 @@
 
 ;; バックアップファイルを作成しない
 (setq make-backup-files nil)
+(setq auto-save-default nil)
 
 ;; 自動保存ファイルを削除する
 (setq delete-auto-save-files t)
