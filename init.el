@@ -229,7 +229,7 @@
 ;; (global-set-key (kbd "C-r") 'yank)
 
 ;; 置換
-(global-set-key (kbd "C-e") 'query-replace)
+(global-set-key (kbd "C-r") 'query-replace)
 
 ;; anything
 (global-set-key (kbd "M-a") 'anything)
