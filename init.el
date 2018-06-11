@@ -1,9 +1,11 @@
-;;
-;;      共通設定
-;;
+;;   ####  共通設定  ####
+
+;; elispを入れるパスを指定
 (add-to-list 'load-path "elisp")
+
 ;; 日本語設定
 (set-language-environment "Japanese")
+
 ;; UTF-8設定
 (prefer-coding-system 'utf-8)
 
@@ -49,12 +51,11 @@
 
 ;; Markdown Modeの有効化
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
-
 (setq markdown-command "/usr/local/bin/multimarkdown")
 
 ;; はみ出した表示をウインドウの右端で折り返さない
-;; (setq-default truncate-lines t)
-;; (setq-default truncate-partial-width-windows t)
+(setq-default truncate-lines nil)
+(setq-default truncate-partial-width-windows nil)
 
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
@@ -63,7 +64,13 @@
 (setq mac-option-modifier 'meta)
 
 ;; 背景を透過する
-(set-frame-parameter nil 'alpha 95 )
+;;(set-frame-parameter nil 'alpha 95 )
+
+;; emacsが自動的に生成する設定を別ファイルに
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 
 ;; 起動時のフレーム設定
 ;;(setq initial-frame-alist
@@ -83,13 +90,9 @@
 ;;(setq w2 (split-window w nil t))
 ;;(setq w3 (split-window w2 nil))
 
-;;
-;;     パッケージ設定
-;;
-;; emacsが自動的に生成する設定を別ファイルに
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
+
+;;  ###  パッケージ設定  ###
+;; http://emacs-jp.github.io/packages/package-management/package-el.html
 
 ;; package.elを有効化
 (require 'package)
@@ -97,17 +100,38 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
+;; パッケージ情報の更新
+(package-refresh-contents)
+
+;; インストールするパッケージの指定
+(defvar my-packages
+  '(
+	multi-term
+	auto-complete
+	all-the-icons
+	neotree
+	flycheck
+	web-mode
+	go-mode
+	powerline
+	anything
+	undo-tree
+	smooth-scroll
+	monokai-theme
+	)
+  )
+
+;; パッケージインストール
+(dolist (package my-packages)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;; ###  パッケージ設定 ###
 
 ;; multi-term
-(unless (package-installed-p 'multi-term)
-  (package-refresh-contents) (package-install 'multi-term))
 (setq multi-term-program shell-file-name)
 
-
 ;; auto-complete.el
-(unless (package-installed-p 'auto-complete)
-  (package-refresh-contents) (package-install 'auto-complete))
-
 (ac-config-default)
 ;; 各モードでauto-completeを有効化する
 (add-to-list 'ac-modes 'text-mode)
@@ -116,57 +140,31 @@
 (add-to-list 'ac-modes 'yatex-mode)
 (add-to-list 'ac-modes 'go-mode)
 (ac-set-trigger-key "TAB")
-(setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
-(setq ac-use-fuzzy t)          ;; 曖昧マッチ
-
-;; all-the-icons
-(unless (package-installed-p 'all-the-icons)
-  (package-refresh-contents)
-  (package-install 'all-the-icons)
-  (all-the-icons-install-fonts)
-  )
+;; 補完メニュー表示時にC-n/C-pで補完候補選択
+(setq ac-use-menu-map t)
+;; 曖昧マッチ
+(setq ac-use-fuzzy t)
 
 ;; neotree
-(unless (package-installed-p 'neotree)
-  (package-refresh-contents) (package-install 'neotree))
-
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-
 (setq neo-show-hidden-files t)
 (neotree)
 
 ;; flycheck
-(unless (package-installed-p 'flycheck)
-  (package-refresh-contents) (package-install 'flycheck))
-
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; web-mode
-(unless (package-installed-p 'web-mode)
-  (package-refresh-contents) (package-install 'web-mode))
-
-;; web-mode
-(unless (package-installed-p 'web-mode)
-  (package-refresh-contents) (package-install 'web-mode))
-
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
 ;; go-mode
-(unless (package-installed-p 'go-mode)
-  (package-refresh-contents) (package-install 'go-mode))
-
 (with-eval-after-load 'go-mode
   ;; auto-complete
   (unless (package-installed-p 'go-autocomplete)
 	(package-refresh-contents) (package-install 'go-autocomplete))
  )
 
-
 ;; powerline
-(unless (package-installed-p 'powerline)
-  (package-refresh-contents) (package-install 'powerline))
-
 (custom-set-faces
  '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
@@ -177,15 +175,7 @@
 
 (powerline-default-theme)
 
-
 ;; anything
-(unless (package-installed-p 'anything)
-  (package-refresh-contents) (package-install 'anything))
-
-(require 'anything)
-(require 'anything-startup)
-(require 'anything-config)
-
 (setq anything-sources
       '(anything-c-source-buffers+
 	anything-c-source-recentf
@@ -197,20 +187,15 @@
 	))
 
 ;; undo-tree
-(unless (package-installed-p 'undo-tree)
-  (package-refresh-contents) (package-install 'undo-tree))
-(require 'undo-tree)
 (global-undo-tree-mode t)
 
-(unless (package-installed-p 'smooth-scroll)
-  (package-refresh-contents) (package-install 'smooth-scroll))
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
+;; smooth-scroll
+;;(smooth-scroll-mode t)
 
+;; monakai-theme
+(load-theme 'monokai t)
 
-;;
-;;     キーバインド設定
-;;
+;;   ###  キーバインド設定 ###
 
 ;; ウインドウ移動
 (global-set-key (kbd "C-<left>")  'windmove-left)
@@ -287,20 +272,3 @@
                (throw 'end-flag t)))))))
 
 (global-set-key (kbd "C-x r") 'window-resizer)
-
-
-;;
-;;     カラーテーマ設定
-;;
-
-;;(unless (package-installed-p 'atom-one-dark-theme)
-;;  (package-refresh-contents) (package-install 'atom-one-dark-theme))
-;;
-;;(load-theme 'atom-one-dark t)
-;;(custom-set-faces
-;;
-
-(unless (package-installed-p 'monokai-theme)                  
-  (package-refresh-contents) (package-install 'monokai-theme))
-
-(load-theme 'monokai t)

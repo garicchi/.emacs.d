@@ -3,7 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#333333" :foreground "#dddddd" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Menlo"))))
+ '(default ((t (:inherit nil :stipple nil :background "#303030" :foreground "#dddddd" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Menlo"))))
  '(font-lock-builtin-face ((t (:foreground "#eeeeee" :weight normal))))
  '(font-lock-comment-delimiter-face ((t (:foreground "#8fcc8f"))))
  '(font-lock-comment-face ((t (:foreground "#8fcc8f"))))
@@ -16,6 +16,7 @@
  '(font-lock-variable-name-face ((t (:foreground "#c28fcc"))))
  '(fringe ((t (:background "#333333" :foreground "#dddddd"))))
  '(linum ((t (:inherit default :background "#333333" :foreground "#dddddd" :underline nil))))
+ '(markdown-header-face ((t (:foreground "#8fcc8f"))))
  '(markdown-pre-face ((t (:inherit (markdown-code-face default)))))
  '(mode-line ((t (:foreground "#f9f9f9" :background "#bdbdbd" :box nil :height 140))))
  '(mode-line-active ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
@@ -37,13 +38,10 @@
  '(web-mode-json-key-face ((t (:foreground "#f2bb61"))))
  '(web-mode-keyword-face ((t (:foreground "#cc8fa3"))))
  '(web-mode-symbol-face ((t (:foreground "#c28fcc"))))
- '(web-mode-variable-name-face ((t (:foreground "#f2bb61"))))
-)
+ '(web-mode-variable-name-face ((t (:foreground "#f2bb61")))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-	(esup go-mode web-mode undo-tree spaceline-all-the-icons smooth-scroll neotree multi-term monokai-theme markdown-mode jedi flycheck elpy atom-one-dark-theme atom-dark-theme anything))))
+ )
