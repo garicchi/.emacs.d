@@ -114,7 +114,6 @@
 	web-mode
 	go-mode
 	powerline
-	anything
 	undo-tree
 	smooth-scroll
 	monokai-theme
@@ -175,17 +174,6 @@
 
 (powerline-default-theme)
 
-;; anything
-(setq anything-sources
-      '(anything-c-source-buffers+
-	anything-c-source-recentf
-	anything-c-source-emacs-commands
-	anything-c-source-emacs-functions
-	anything-c-source-files-in-current-dir
-	anything-c-source-colors
-	anything-c-source-man-pages
-	))
-
 ;; undo-tree
 (global-undo-tree-mode t)
 
@@ -214,7 +202,7 @@
 ;; (global-set-key (kbd "C-r") 'yank)
 
 ;; 置換
-(global-set-key (kbd "C-r") 'query-replace)
+(global-set-key (kbd "C-t") 'query-replace)
 
 ;; anything
 (global-set-key (kbd "M-a") 'anything)
