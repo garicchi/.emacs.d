@@ -12,6 +12,7 @@
 ;; タブサイズ設定
 (setq-default tab-width 4)
 (setq default-tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 ;; メニューバー削除
 (menu-bar-mode -1)
@@ -71,6 +72,8 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+;; ファイル名保管で大文字小文字の違いを虫する
+(setq completion-ignore-case t)
 
 ;; 起動時のフレーム設定
 ;;(setq initial-frame-alist
@@ -106,6 +109,7 @@
 ;; インストールするパッケージの指定
 (defvar my-packages
   '(
+	markdown-mode
 	multi-term
 	auto-complete
 	all-the-icons
@@ -216,8 +220,10 @@
 (global-set-key (kbd "M-.") 'end-of-buffer)
 
 ;; カーソル移動コマンド
-(global-set-key (kbd "C-l") 'forward-char)
-(global-set-key (kbd "C-k") 'backward-char)
+(global-set-key "\C-h" 'backward-char)
+(global-set-key "\C-j" 'next-line)
+(global-set-key "\C-k" 'previous-line)
+(global-set-key "\C-l" 'forward-char)
 
 ;; バッファリスト
 (global-set-key (kbd "C-<tab>") 'buffer-menu)

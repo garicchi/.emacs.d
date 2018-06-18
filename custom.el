@@ -16,7 +16,10 @@
  '(font-lock-variable-name-face ((t (:foreground "#c28fcc"))))
  '(fringe ((t (:background "#333333" :foreground "#dddddd"))))
  '(linum ((t (:inherit default :background "#333333" :foreground "#dddddd" :underline nil))))
- '(markdown-header-face ((t (:foreground "#8fcc8f"))))
+ '(markdown-header-delimiter-face ((t (:inherit markdown-markup-face :foreground "#cc8fa3"))))
+ '(markdown-header-face ((t (:foreground "#cc8fa3"))))
+ '(markdown-list-face ((t (:inherit markdown-markup-face :foreground "#c28fcc"))))
+ '(markdown-markup-face ((t (:inherit \#cc8fa3 :slant normal :weight normal))))
  '(markdown-pre-face ((t (:inherit (markdown-code-face default)))))
  '(mode-line ((t (:foreground "#f9f9f9" :background "#bdbdbd" :box nil :height 140))))
  '(mode-line-active ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
@@ -46,4 +49,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(monokai-theme smooth-scroll undo-tree powerline go-mode web-mode flycheck neotree all-the-icons auto-complete multi-term))))
+    (monokai-theme smooth-scroll undo-tree powerline go-mode web-mode flycheck neotree all-the-icons auto-complete multi-term))))
