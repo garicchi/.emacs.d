@@ -12,7 +12,7 @@
   '(
 	markdown-mode
 	multi-term
-	company
+	auto-complete
 	all-the-icons
 	neotree
 	flycheck
