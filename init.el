@@ -1,6 +1,13 @@
 ;;   ####  共通設定  ####
 
 ;; elispを入れるパスを指定
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (add-to-list 'load-path "elisp")
 
 ;; 日本語設定
@@ -97,38 +104,6 @@
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
 
-;; package.elを有効化
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(fset 'package-desc-vers 'package--ac-desc-version)
-(package-initialize)
-;; パッケージ情報の更新
-(package-refresh-contents)
-
-;; インストールするパッケージの指定
-(defvar my-packages
-  '(
-	markdown-mode
-	multi-term
-	company
-	all-the-icons
-	neotree
-	flycheck
-	web-mode
-	go-mode
-	powerline
-	undo-tree
-	smooth-scroll
-	monokai-theme
-	)
-  )
-
-;; パッケージインストール
-(dolist (package my-packages)
-  (unless (package-installed-p package)
-    (package-install package)))
-
 ;; ###  パッケージ設定 ###
 
 ;; multi-term
@@ -149,10 +124,10 @@
 ;;(setq ac-use-fuzzy t)
 
 ;; company-mode
-(global-company-mode) ; 全バッファで有効にする
-(setq company-idle-delay 0) ; デフォルトは0.5
-(setq company-minimum-prefix-length 2) ; デフォルトは4
-(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+;;(global-company-mode) ; 全バッファで有効にする
+;;(setq company-idle-delay 0) ; デフォルトは0.5
+;;(setq company-minimum-prefix-length 2) ; デフォルトは4
+;;(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 
 ;; neotree
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
