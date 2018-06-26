@@ -7,25 +7,11 @@
 ;; パッケージ情報の更新
 (package-refresh-contents)
 
-;; インストールするパッケージの指定
-(defvar my-packages
-  '(
-	markdown-mode
-	multi-term
-	auto-complete
-	all-the-icons
-	neotree
-	flycheck
-	web-mode
-	go-mode
-	powerline
-	undo-tree
-	smooth-scroll
-	monokai-theme
-	)
-  )
-
-;; パッケージインストール
-(dolist (package my-packages)
-  (unless (package-installed-p package)
-    (package-install package)))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (all-the-icons web-mode undo-tree smooth-scroll powerline popup neotree multi-term monokai-theme markdown-mode go-mode flycheck company))))

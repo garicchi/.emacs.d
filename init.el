@@ -106,28 +106,36 @@
 
 ;; ###  パッケージ設定 ###
 
+;; package.elを有効化
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(fset 'package-desc-vers 'package--ac-desc-version)
+(package-initialize)
+
+
 ;; multi-term
 (setq multi-term-program shell-file-name)
 
 ;; auto-complete.el
-(ac-config-default)
+;;(ac-config-default)
 ;; 各モードでauto-completeを有効化する
-(add-to-list 'ac-modes 'text-mode)
-(add-to-list 'ac-modes 'fundamental-mode) 
-(add-to-list 'ac-modes 'org-mode)
-(add-to-list 'ac-modes 'yatex-mode)
-(add-to-list 'ac-modes 'go-mode)
-(ac-set-trigger-key "TAB")
+;;(add-to-list 'ac-modes 'text-mode)
+;;(add-to-list 'ac-modes 'fundamental-mode) 
+;;(add-to-list 'ac-modes 'org-mode)
+;;(add-to-list 'ac-modes 'yatex-mode)
+;;(add-to-list 'ac-modes 'go-mode)
+;;(ac-set-trigger-key "TAB")
 ;; 補完メニュー表示時にC-n/C-pで補完候補選択
-(setq ac-use-menu-map t)
+;;(setq ac-use-menu-map t)
 ;; 曖昧マッチ
-(setq ac-use-fuzzy t)
+;;(setq ac-use-fuzzy t)
 
 ;; company-mode
-;;(global-company-mode) ; 全バッファで有効にする
-;;(setq company-idle-delay 0) ; デフォルトは0.5
-;;(setq company-minimum-prefix-length 2) ; デフォルトは4
-;;(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+(global-company-mode) ; 全バッファで有効にする
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 
 ;; neotree
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))

@@ -42,11 +42,3 @@
  '(web-mode-keyword-face ((t (:foreground "#cc8fa3"))))
  '(web-mode-symbol-face ((t (:foreground "#c28fcc"))))
  '(web-mode-variable-name-face ((t (:foreground "#f2bb61")))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company markdown-mode monokai-theme smooth-scroll undo-tree powerline go-mode web-mode flycheck neotree all-the-icons auto-complete multi-term))))
