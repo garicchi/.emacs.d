@@ -14,4 +14,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (all-the-icons web-mode undo-tree smooth-scroll powerline popup neotree multi-term monokai-theme markdown-mode go-mode flycheck company))))
+    (all-the-icons web-mode undo-tree smooth-scroll powerline popup neotree multi-term monokai-theme markdown-mode go-mode flycheck company smooth-scroll))))

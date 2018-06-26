@@ -2,12 +2,6 @@
 
 ;; elispを入れるパスを指定
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (add-to-list 'load-path "elisp")
 
 ;; 日本語設定
@@ -113,6 +107,41 @@
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
 
+(when (not (package-installed-p 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
+
+(use-package all-the-icons
+             :ensure t)
+(use-package web-mode
+             :ensure t)
+(use-package undo-tree
+             :ensure t)
+(use-package smooth-scroll
+             :ensure t)
+(use-package powerline
+             :ensure t)
+(use-package popup
+             :ensure t)
+(use-package neotree
+             :ensure t)
+(use-package multi-term
+             :ensure t)
+(use-package monokai-theme
+             :ensure t)
+(use-package markdown-mode
+             :ensure t)
+(use-package go-mode
+             :ensure t)
+(use-package flycheck
+             :ensure t)
+(use-package company
+             :ensure t)
+(use-package smooth-scroll
+             :ensure t)
+
 
 ;; multi-term
 (setq multi-term-program shell-file-name)
@@ -171,8 +200,8 @@
 (global-undo-tree-mode t)
 
 ;; smooth-scroll
-;;(smooth-scroll-mode t)
-;;(setq smooth-scroll/vscroll-step-size 4)
+(smooth-scroll-mode t)
+(setq smooth-scroll/vscroll-step-size 4)
 
 ;; monakai-theme
 (load-theme 'monokai t)

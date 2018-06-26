@@ -21,7 +21,7 @@
  '(markdown-list-face ((t (:inherit markdown-markup-face :foreground "#c28fcc"))))
  '(markdown-markup-face ((t (:inherit \#cc8fa3 :slant normal :weight normal))))
  '(markdown-pre-face ((t (:inherit (markdown-code-face default)))))
- '(mode-line ((t (:foreground "#f9f9f9" :background "#bdbdbd" :box nil :height 140))))
+ '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
  '(mode-line-active ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
  '(neo-dir-link-face ((t (:foreground "#8fb8cc"))))
@@ -29,8 +29,8 @@
  '(neo-root-dir-face ((t (:background "#333333" :foreground "#dddddd"))))
  '(neo-vc-default-face ((t (:foreground "#eeeeee"))))
  '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#424242" :box nil :height 130))))
- '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#E91E63" :box nil :height 130))))
- '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 130))))
+ '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
+ '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
  '(region ((t (:inherit highlight :background "#AD1457"))))
  '(web-mode-builtin-face ((t (:foreground "#cc8fa3"))))
  '(web-mode-constant-face ((t (:foreground "#bb88fcc"))))
@@ -42,3 +42,11 @@
  '(web-mode-keyword-face ((t (:foreground "#cc8fa3"))))
  '(web-mode-symbol-face ((t (:foreground "#c28fcc"))))
  '(web-mode-variable-name-face ((t (:foreground "#f2bb61")))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
