@@ -11,9 +11,31 @@
 (prefer-coding-system 'utf-8)
 
 ;; タブサイズ設定
+(require 'cl)
 (setq-default tab-width 4)
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
+
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120 124 128))
+(global-set-key (kbd "<backtab>")  'backtab-to-tab-stop)
+;; backtab
+(defun backtab-to-tab-stop ()
+  "Do back to previous tab-stop"
+  (interactive)
+  (let ((tabs tab-stop-list)
+    (col (current-column))
+    (tab-last 0))
+    (back-to-indentation)           ; 現在行の白文字でない最初の文字へポイントを移動
+    (if (= col (current-column))        ; 当初のカーソル位置が白文字でない最初の文字位置と一致しているかどうかで期待する位置を調整
+    (while (and tabs (> col (car tabs)))
+      (setq tab-last (car tabs))
+      (setq tabs (cdr tabs)))
+      (while (and tabs (>= col (car tabs)))
+      (setq tab-last (car tabs))
+      (setq tabs (cdr tabs))))
+    ; 期待するタブ位置にくるまで１文字ずつ削除
+    (while (> (current-column) tab-last)
+      (delete-backward-char 1))))
 
 ;; メニューバー削除
 (menu-bar-mode -1)

@@ -2,7 +2,7 @@
 
 ## INSTALL
 ```sh
-git clone https://github.com/garicchi/.emacs.d.git
+    git clone https://github.com/garicchi/.emacs.d.git
 ```
 
 ## PACKAGES
