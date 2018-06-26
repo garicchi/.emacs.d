@@ -11,7 +11,6 @@
 (prefer-coding-system 'utf-8)
 
 ;; タブサイズ設定
-(require 'cl)
 (setq-default tab-width 4)
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
@@ -311,3 +310,7 @@
                (throw 'end-flag t)))))))
 
 (global-set-key (kbd "C-x r") 'window-resizer)
+
+(global-set-key (kbd "C-c C-d") 'neotree-delete-node)
+(global-set-key (kbd "C-c C-r") 'neotree-rename-node)
+
