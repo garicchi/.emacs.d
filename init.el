@@ -162,6 +162,10 @@
              :ensure t)
 (use-package smooth-scroll
              :ensure t)
+(use-package anzu
+             :ensure t)
+(use-package git-gutter-fringe
+             :ensure t)
 
 
 ;; multi-term
@@ -226,7 +230,10 @@
 
 ;; smooth-scroll
 (smooth-scroll-mode t)
-(setq smooth-scroll/vscroll-step-size 4)
+(setq smooth-scroll/vscroll-step-size 8)
+
+;; anzu
+(global-anzu-mode +1)
 
 ;; monakai-theme
 (load-theme 'monokai t)

@@ -49,4 +49,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
+    (git-gutter-fringe anzu flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
