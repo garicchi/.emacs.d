@@ -164,7 +164,7 @@
              :ensure t)
 (use-package anzu
              :ensure t)
-(use-package git-gutter-fringe
+(use-package git-gutter
              :ensure t)
 
 
@@ -237,6 +237,9 @@
 
 ;; monakai-theme
 (load-theme 'monokai t)
+
+;; git gutter
+(global-git-gutter-mode t)
 
 ;;   ###  キーバインド設定 ###
 
