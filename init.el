@@ -248,6 +248,9 @@
 ;; git gutter
 (global-git-gutter-mode t)
 
+;; eww
+(setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
+
 ;;   ###  キーバインド設定 ###
 
 ;; ウインドウ移動
@@ -257,10 +260,14 @@
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
 ;; ウインドウ分割
-(global-set-key (kbd "M-<left>") 'split-window-horizontally)
-(global-set-key (kbd "M-<right>") 'split-window-horizontally)
-(global-set-key (kbd "M-<up>") 'split-window-vertically)
-(global-set-key (kbd "M-<down>") 'split-window-vertically)
+(global-set-key (kbd "C-x <left>") 'split-window-horizontally)
+(global-set-key (kbd "C-x <right>") 'split-window-horizontally)
+(global-set-key (kbd "C-x <up>") 'split-window-vertically)
+(global-set-key (kbd "C-x <down>") 'split-window-vertically)
+
+;; 移動
+(global-set-key (kbd "ESC <down>") (kbd "C-u 5 C-n"))
+(global-set-key (kbd "ESC <up>") (kbd "C-u 5 C-p"))
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
@@ -295,6 +302,9 @@
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
+
+;; eww
+(global-set-key (kbd "C-x g") 'eww)
 
 ;; ウインドウをリサイズできるようにする
 (defun window-resizer ()

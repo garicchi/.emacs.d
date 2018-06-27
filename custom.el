@@ -50,4 +50,4 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(package-selected-packages
    (quote
-    (flycheck-pos-tip git-gutter-fringe anzu flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
+    (google-this flycheck-pos-tip git-gutter-fringe anzu flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
