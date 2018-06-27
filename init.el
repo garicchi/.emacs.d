@@ -2,7 +2,7 @@
 
 ;; elispを入れるパスを指定
 
-(add-to-list 'load-path "elisp")
+(add-to-list 'load-path "~/.emacs.d/elisp/")
 
 ;; 日本語設定
 (set-language-environment "Japanese")
@@ -138,8 +138,8 @@
              :ensure t)
 (use-package web-mode
              :ensure t)
-(use-package undo-tree
-             :ensure t)
+;;(use-package undo-tree
+;;             :ensure t)
 (use-package smooth-scroll
              :ensure t)
 (use-package powerline
@@ -165,6 +165,8 @@
 (use-package anzu
              :ensure t)
 (use-package git-gutter
+             :ensure t)
+(use-package flycheck-pos-tip
              :ensure t)
 
 
@@ -200,6 +202,11 @@
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+;; flycheck-pos-tip
+(eval-after-load 'flycheck
+  '(custom-set-variables
+   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+
 ;; sql-mode
 (add-to-list 'auto-mode-alist '("\\.sql?$"     . sql-mode))
 
@@ -226,7 +233,9 @@
 (powerline-default-theme)
 
 ;; undo-tree
-(global-undo-tree-mode t)
+;; http://kouritool.com/what-linux/emacs%E3%81%AEundo%E3%81%A8redo%E3%82%92%E4%BD%BF%E3%81%84%E3%82%84%E3%81%99%E3%81%8F%E3%81%99%E3%82%8B/
+(when (require 'undo-tree nil t)
+(global-undo-tree-mode))
 
 ;; smooth-scroll
 (smooth-scroll-mode t)
@@ -321,6 +330,23 @@
 
 (global-set-key (kbd "C-x r") 'window-resizer)
 
+;; neotree
 (global-set-key (kbd "C-c C-d") 'neotree-delete-node)
 (global-set-key (kbd "C-c C-r") 'neotree-rename-node)
+
+;; ### CHEAT COMMAND ###
+(defvar cheat-root "~/.emacs.d/cheat/")
+(defun cheat()
+  (interactive)
+  (view-file (concat cheat-root "cheat.md"))
+  )
+
+(defun cheat-tmux()
+  (interactive)
+  (view-file (concat cheat-root "cheat-tmux.md"))
+  )
+(defun cheat-mysql()
+  (interactive)
+  (view-file (concat cheat-root "cheat-mysql.md"))
+  )
 

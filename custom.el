@@ -47,6 +47,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(package-selected-packages
    (quote
-    (git-gutter-fringe anzu flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
+    (flycheck-pos-tip git-gutter-fringe anzu flycheck web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode go-mode go-autocomplete company all-the-icons))))
