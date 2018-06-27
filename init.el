@@ -98,17 +98,17 @@
 (setq completion-ignore-case t)
 
 ;; 起動時のフレーム設定
-;;(setq initial-frame-alist
-;;   (append (list
-;;      '(top . 0)
-;;      '(left . 0)
-;;      '(width . 200)
-;;      '(height . 60)
-;;	  )
-;;	  initial-frame-alist
-;;	  )
-;;   )
-;;(setq default-frame-alist initial-frame-alist)
+(setq initial-frame-alist
+   (append (list
+      '(top . 0)
+      '(left . 0)
+      '(width . 800)
+      '(height . 600)
+	  )
+	  initial-frame-alist
+	  )
+   )
+(setq default-frame-alist initial-frame-alist)
 
 ;; 起動時に分割
 ;;(setq w (selected-window))
@@ -138,8 +138,8 @@
              :ensure t)
 (use-package web-mode
              :ensure t)
-;;(use-package undo-tree
-;;             :ensure t)
+(use-package undo-tree
+             :ensure t)
 (use-package smooth-scroll
              :ensure t)
 (use-package powerline
@@ -233,9 +233,7 @@
 (powerline-default-theme)
 
 ;; undo-tree
-;; http://kouritool.com/what-linux/emacs%E3%81%AEundo%E3%81%A8redo%E3%82%92%E4%BD%BF%E3%81%84%E3%82%84%E3%81%99%E3%81%8F%E3%81%99%E3%82%8B/
-(when (require 'undo-tree nil t)
-(global-undo-tree-mode))
+(global-undo-tree-mode)
 
 ;; smooth-scroll
 (smooth-scroll-mode t)
@@ -349,4 +347,5 @@
   (interactive)
   (view-file (concat cheat-root "cheat-mysql.md"))
   )
+
 
