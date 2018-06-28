@@ -265,9 +265,14 @@
 (global-set-key (kbd "C-x <up>") 'split-window-vertically)
 (global-set-key (kbd "C-x <down>") 'split-window-vertically)
 
-;; 移動
+;; スキップ移動
 (global-set-key (kbd "ESC <down>") (kbd "C-u 5 C-n"))
 (global-set-key (kbd "ESC <up>") (kbd "C-u 5 C-p"))
+(global-set-key (kbd "M-n") (kbd "C-u 5 C-n"))
+(global-set-key (kbd "M-p") (kbd "C-u 5 C-p"))
+
+(global-set-key (kbd "M-f") (kbd "M-<right>"))
+(global-set-key (kbd "M-b") (kbd "M-<left>"))
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
@@ -282,16 +287,15 @@
 (global-set-key (kbd "C-,") 'scroll-up)
 (global-set-key (kbd "C-.") 'scroll-down)
 
-
 ;; バッファの末尾と最初に移動
 (global-set-key (kbd "M-,") 'beginning-of-buffer)
 (global-set-key (kbd "M-.") 'end-of-buffer)
 
 ;; カーソル移動コマンド
-(global-set-key "\C-h" 'backward-char)
-(global-set-key "\C-j" 'next-line)
-(global-set-key "\C-k" 'previous-line)
-(global-set-key "\C-l" 'forward-char)
+;;(global-set-key "\C-h" 'backward-char)
+;;(global-set-key "\C-j" 'next-line)
+;;(global-set-key "\C-k" 'previous-line)
+;;(global-set-key "\C-l" 'forward-char)
 
 ;; バッファリスト
 (global-set-key (kbd "C-<tab>") 'buffer-menu)
