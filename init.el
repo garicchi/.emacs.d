@@ -1,3 +1,4 @@
+
 ;;   ####  共通設定  ####
 
 ;; elispを入れるパスを指定
@@ -259,6 +260,11 @@
 (global-set-key (kbd "C-<up>")    'windmove-up)
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
+(global-set-key (kbd "M-;") 'backward-char)
+(global-set-key (kbd "M-:") 'next-line)
+(global-set-key (kbd "M-]") 'forward-char)
+(global-set-key (kbd "M-@") 'previous-line)
+
 ;; ウインドウ分割
 (global-set-key (kbd "C-x <left>") 'split-window-horizontally)
 (global-set-key (kbd "C-x <right>") 'split-window-horizontally)
@@ -266,13 +272,16 @@
 (global-set-key (kbd "C-x <down>") 'split-window-vertically)
 
 ;; スキップ移動
-(global-set-key (kbd "ESC <down>") (kbd "C-u 5 C-n"))
-(global-set-key (kbd "ESC <up>") (kbd "C-u 5 C-p"))
-(global-set-key (kbd "M-n") (kbd "C-u 5 C-n"))
-(global-set-key (kbd "M-p") (kbd "C-u 5 C-p"))
+(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
+(global-set-key (kbd "M-<up>") (kbd "C-u 5 C-<up>"))
+(global-set-key (kbd "M-<right>") (kbd "C-u 5 <right>"))
+(global-set-key (kbd "M-<left>") (kbd "C-u 5 <left>"))
 
-(global-set-key (kbd "M-f") (kbd "M-<right>"))
-(global-set-key (kbd "M-b") (kbd "M-<left>"))
+(global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
+(global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
+(global-set-key (kbd "M-}") (kbd "C-u 5 <right>"))
+(global-set-key (kbd "M-+") (kbd "C-u 5 <left>"))
+
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
