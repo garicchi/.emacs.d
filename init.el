@@ -364,6 +364,7 @@
 
 ;; ### CHEAT COMMAND ###
 (defvar cheat-root "~/.emacs.d/cheat/")
+
 (defun cheat()
   (interactive)
   (view-file (concat cheat-root "cheat.md"))
@@ -373,8 +374,14 @@
   (interactive)
   (view-file (concat cheat-root "cheat-tmux.md"))
   )
+
 (defun cheat-mysql()
   (interactive)
   (view-file (concat cheat-root "cheat-mysql.md"))
+  )
+
+(defun cheat-go()
+  (interactive)
+  (view-file (concat cheat-root "cheat-go.md"))
   )
 
