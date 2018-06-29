@@ -17,6 +17,7 @@
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120 124 128))
 (global-set-key (kbd "<backtab>")  'backtab-to-tab-stop)
+(global-set-key (kbd "<tab>") 'tab-to-tab-stop)
 ;; backtab
 (defun backtab-to-tab-stop ()
   "Do back to previous tab-stop"
@@ -168,6 +169,8 @@
              :ensure t)
 (use-package flycheck-pos-tip
              :ensure t)
+(use-package company-go
+             :ensure t)
 
 
 ;; multi-term
@@ -182,7 +185,7 @@
 ;;(add-to-list 'ac-modes 'yatex-mode)
 ;;(add-to-list 'ac-modes 'go-mode)
 ;;(ac-set-trigger-key "TAB")
-;; 補完メニュー表示時にC-n/C-pで補完候補選択
+;; 補完メニュー表示時に-n/C-pで補完候補選択
 ;;(setq ac-use-menu-map t)
 ;; 曖昧マッチ
 ;;(setq ac-use-fuzzy t)
@@ -193,10 +196,15 @@
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 (add-to-list 'company-backends 'company-edbi)
+(global-set-key (kbd "C-<tab>") 'company-complete)
 
 ;; neotree
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 (setq neo-show-hidden-files t)
+(eval-after-load "neotree"
+  '(progn
+     (define-key neotree-mode-map (kbd "C-i") nil)
+     ))
 (neotree)
 
 ;; flycheck
@@ -214,12 +222,6 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
-;; go-mode
-(with-eval-after-load 'go-mode
-  ;; auto-complete
-  (unless (package-installed-p 'go-autocomplete)
-	(package-refresh-contents) (package-install 'go-autocomplete))
- )
 
 ;; powerline
 (custom-set-faces
@@ -259,17 +261,36 @@
 (global-set-key (kbd "C-<up>")    'windmove-up)
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
+(global-set-key (kbd "C-x j")  'windmove-left)
+(global-set-key (kbd "C-x k")  'windmove-down)
+(global-set-key (kbd "C-x i")    'windmove-up)
+(global-set-key (kbd "C-x l") 'windmove-right)
+
+
+;; 移動
+(global-set-key (kbd "C-u") 'previous-line)
+(global-set-key (kbd "C-j") 'next-line)
+(global-set-key (kbd "C-k") 'forward-char)
+(global-set-key (kbd "C-h") 'backward-char)
+
+
 ;; ウインドウ分割
-(global-set-key (kbd "C-x <left>") 'split-window-horizontally)
-(global-set-key (kbd "C-x <right>") 'split-window-horizontally)
-(global-set-key (kbd "C-x <up>") 'split-window-vertically)
-(global-set-key (kbd "C-x <down>") 'split-window-vertically)
+(global-set-key (kbd "C-c <left>") 'split-window-horizontally)
+(global-set-key (kbd "C-c <right>") 'split-window-horizontally)
+(global-set-key (kbd "C-c <up>") 'split-window-vertically)
+(global-set-key (kbd "C-c <down>") 'split-window-vertically)
+
+(global-set-key (kbd "C-c j") 'split-window-horizontally)
+(global-set-key (kbd "C-c l") 'split-window-horizontally)
+(global-set-key (kbd "C-c i") 'split-window-vertically)
+(global-set-key (kbd "C-c k") 'split-window-vertically)
+
 
 ;; スキップ移動
-(global-set-key (kbd "ESC <down>") (kbd "C-u 5 C-n"))
-(global-set-key (kbd "ESC <up>") (kbd "C-u 5 C-p"))
-(global-set-key (kbd "M-n") (kbd "C-u 5 C-n"))
-(global-set-key (kbd "M-p") (kbd "C-u 5 C-p"))
+(global-set-key (kbd "M-u") (kbd "C-u 5 C-p"))
+(global-set-key (kbd "M-j") (kbd "C-u 5 C-n"))
+(global-set-key (kbd "M-k") (kbd "C-u 5 C-f"))
+(global-set-key (kbd "M-h") (kbd "C-u 5 C-b"))
 
 (global-set-key (kbd "M-f") (kbd "M-<right>"))
 (global-set-key (kbd "M-b") (kbd "M-<left>"))
@@ -298,7 +319,6 @@
 ;;(global-set-key "\C-l" 'forward-char)
 
 ;; バッファリスト
-(global-set-key (kbd "C-<tab>") 'buffer-menu)
 ;; (global-set-key (kbd "M-<tab>") 'switch-to-buffer)
 
 ;; multi-term
@@ -361,5 +381,4 @@
   (interactive)
   (view-file (concat cheat-root "cheat-mysql.md"))
   )
-
 
