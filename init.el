@@ -322,6 +322,8 @@
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
+(global-set-key (kbd "C-b") 'buffer-menu)
+
 
 ;; eww
 (global-set-key (kbd "C-x g") 'eww)
