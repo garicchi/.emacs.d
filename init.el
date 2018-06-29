@@ -77,6 +77,11 @@
 ;; Markdown Modeの有効化
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 (setq markdown-command "/usr/local/bin/multimarkdown")
+(eval-after-load "markdown"
+  '(progn
+     (define-key markdown-mode-map (kbd "<S-tab>") nil)
+     ))
+
 
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
@@ -209,12 +214,12 @@
 (neotree)
 
 ;; flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;;(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; flycheck-pos-tip
-(eval-after-load 'flycheck
-  '(custom-set-variables
-   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+;;(eval-after-load 'flycheck
+;;  '(custom-set-variables
+;;   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 
 ;; sql-mode
 (add-to-list 'auto-mode-alist '("\\.sql?$"     . sql-mode))
