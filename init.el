@@ -77,11 +77,7 @@
 ;; Markdown Modeの有効化
 (add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
 (setq markdown-command "/usr/local/bin/multimarkdown")
-(eval-after-load "markdown"
-  '(progn
-     (define-key markdown-mode-map (kbd "<S-tab>") nil)
-     ))
-
+;;(define-key markdown-mode-map (kbd "S-<tab>") nil)
 
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
@@ -267,10 +263,6 @@
 (global-set-key (kbd "C-<up>")    'windmove-up)
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
-(global-set-key (kbd "M-;") 'backward-char)
-(global-set-key (kbd "M-:") 'next-line)
-(global-set-key (kbd "M-]") 'forward-char)
-(global-set-key (kbd "M-@") 'previous-line)
 
 ;; ウインドウ分割
 (global-set-key (kbd "C-c <left>") 'split-window-horizontally)
@@ -283,6 +275,13 @@
 (global-set-key (kbd "C-c i") 'split-window-vertically)
 (global-set-key (kbd "C-c k") 'split-window-vertically)
 
+;; 移動
+
+(global-set-key (kbd "M-:") 'next-line)
+(global-set-key (kbd "M-@") 'previous-line)
+(global-set-key (kbd "M-]") 'forward-char)
+(global-set-key (kbd "M-;") 'backward-char)
+
 
 ;; スキップ移動
 
@@ -293,8 +292,8 @@
 
 (global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
 (global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
-(global-set-key (kbd "M-}") (kbd "C-u 5 <right>"))
-(global-set-key (kbd "M-+") (kbd "C-u 5 <left>"))
+(global-set-key (kbd "M-}") 'forward-word)
+(global-set-key (kbd "M-+") 'backward-word)
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
@@ -390,5 +389,10 @@
 (defun cheat-go()
   (interactive)
   (view-file (concat cheat-root "cheat-go.md"))
+  )
+
+(defun cheat-rsync()
+  (interactive)
+  (view-file (concat cheat-root "cheat-rsync.md"))
   )
 
