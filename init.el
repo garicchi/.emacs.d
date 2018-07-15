@@ -1,4 +1,3 @@
-
 ;;   ####  共通設定  ####
 
 ;; elispを入れるパスを指定
@@ -42,7 +41,7 @@
 (menu-bar-mode -1)
 
 ;; ツールバー削除
-(tool-bar-mode 0)
+;(tool-bar-mode 0)
 
 ;; スタートメッセージを表示させない
 (setq inhibit-startup-message t)
@@ -82,7 +81,7 @@
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
 (setq-default truncate-partial-width-windows nil)
-
+        
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
 
@@ -96,7 +95,6 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
-
 ;; ファイル名保管で大文字小文字の違いを虫する
 (setq completion-ignore-case t)
 
@@ -167,30 +165,18 @@
              :ensure t)
 (use-package anzu
              :ensure t)
-(use-package git-gutter
+(use-package helm
              :ensure t)
 (use-package flycheck-pos-tip
              :ensure t)
 (use-package company-go
              :ensure t)
+(use-package json-mode
+  :ensure t)
 
 
 ;; multi-term
 (setq multi-term-program shell-file-name)
-
-;; auto-complete.el
-;;(ac-config-default)
-;; 各モードでauto-completeを有効化する
-;;(add-to-list 'ac-modes 'text-mode)
-;;(add-to-list 'ac-modes 'fundamental-mode) 
-;;(add-to-list 'ac-modes 'org-mode)
-;;(add-to-list 'ac-modes 'yatex-mode)
-;;(add-to-list 'ac-modes 'go-mode)
-;;(ac-set-trigger-key "TAB")
-;; 補完メニュー表示時に-n/C-pで補完候補選択
-;;(setq ac-use-menu-map t)
-;; 曖昧マッチ
-;;(setq ac-use-fuzzy t)
 
 ;; company-mode
 (global-company-mode) ; 全バッファで有効にする
@@ -209,13 +195,13 @@
      ))
 (neotree)
 
-;; flycheck
-;;(add-hook 'after-init-hook #'global-flycheck-mode)
+ flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; flycheck-pos-tip
-;;(eval-after-load 'flycheck
-;;  '(custom-set-variables
-;;   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+ flycheck-pos-tip
+(eval-after-load 'flycheck
+  '(custom-set-variables
+   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 
 ;; sql-mode
 (add-to-list 'auto-mode-alist '("\\.sql?$"     . sql-mode))
@@ -234,7 +220,7 @@
  '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 140))))
  )
 
-(powerline-default-theme)
+;(powerline-default-theme)
 
 ;; undo-tree
 (global-undo-tree-mode)
@@ -249,8 +235,40 @@
 ;; monakai-theme
 (load-theme 'monokai t)
 
-;; git gutter
-(global-git-gutter-mode t)
+;; helm
+(helm-mode 1)
+(defvar helm-source-emacs-commands
+  (helm-build-sync-source "Emacs commands"
+    :candidates (lambda ()
+                  (let ((cmds))
+                    (mapatoms
+                     (lambda (elt) (when (commandp elt) (push elt cmds))))
+                    cmds))
+    :coerce #'intern-soft
+    :action #'command-execute)
+  "A simple helm source for Emacs commands.")
+
+(defvar helm-source-emacs-commands-history
+  (helm-build-sync-source "Emacs commands history"
+    :candidates (lambda ()
+                  (let ((cmds))
+                    (dolist (elem extended-command-history)
+                      (push (intern elem) cmds))
+                    cmds))
+    :coerce #'intern-soft
+    :action #'command-execute)
+  "Emacs commands history")
+
+(custom-set-variables
+ '(helm-mini-default-sources '(helm-source-buffers-list
+                               helm-source-recentf
+                               helm-source-files-in-current-dir
+                               helm-source-emacs-commands-history
+                               helm-source-emacs-commands
+                               )))
+(define-key global-map (kbd "M-x") 'helm-mini)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
 
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
@@ -258,6 +276,11 @@
 ;;   ###  キーバインド設定 ###
 
 ;; ウインドウ移動
+;(global-set-key (kbd "C-M j")  'windmove-left)
+;(global-set-key (kbd "C-M k")  'windmove-down)
+;(Global-Set-Key (Kbd "C-M i")  'windmove-up)
+;(Global-Set-Key (kbd "C-M l") 'windmove-right)
+
 (global-set-key (kbd "C-<left>")  'windmove-left)
 (global-set-key (kbd "C-<down>")  'windmove-down)
 (global-set-key (kbd "C-<up>")    'windmove-up)
@@ -265,35 +288,29 @@
 
 
 ;; ウインドウ分割
-(global-set-key (kbd "C-c <left>") 'split-window-horizontally)
-(global-set-key (kbd "C-c <right>") 'split-window-horizontally)
-(global-set-key (kbd "C-c <up>") 'split-window-vertically)
-(global-set-key (kbd "C-c <down>") 'split-window-vertically)
-
-(global-set-key (kbd "C-c j") 'split-window-horizontally)
-(global-set-key (kbd "C-c l") 'split-window-horizontally)
-(global-set-key (kbd "C-c i") 'split-window-vertically)
-(global-set-key (kbd "C-c k") 'split-window-vertically)
+(global-set-key (kbd "C-d") 'split-window-horizontally)
+(global-set-key (kbd "M-d") 'split-window-vertically)
+(global-set-key (kbd "C-f") 'other-window)
 
 ;; 移動
 
-(global-set-key (kbd "M-:") 'next-line)
-(global-set-key (kbd "M-@") 'previous-line)
-(global-set-key (kbd "M-]") 'forward-char)
-(global-set-key (kbd "M-;") 'backward-char)
+;(global-set-key (kbd "M-:") 'next-line)
+;(global-set-key (kbd "M-@") 'previous-line)
+;(global-set-key (kbd "M-]") 'forward-char)
+;(global-set-key (kbd "M-;") 'backward-char)
 
 
 ;; スキップ移動
 
-(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
-(global-set-key (kbd "M-<up>") (kbd "C-u 5 C-<up>"))
-(global-set-key (kbd "M-<right>") (kbd "C-u 5 <right>"))
-(global-set-key (kbd "M-<left>") (kbd "C-u 5 <left>"))
+;(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
+;(global-set-key (kbd "M-<up>") (kbd "C-u 5 C-<up>"))
+;(global-set-key (kbd "M-<right>") (kbd "C-u 5 <right>"))
+;(global-set-key (kbd "M-<left>") (kbd "C-u 5 <left>"))
 
-(global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
-(global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
-(global-set-key (kbd "M-}") 'forward-word)
-(global-set-key (kbd "M-+") 'backward-word)
+;(global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
+;(global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
+;(global-set-key (kbd "M-}") 'forward-word)
+;(global-set-key (kbd "M-+") 'backward-word)
 
 ;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
@@ -369,12 +386,12 @@
 (global-set-key (kbd "C-c C-r") 'neotree-rename-node)
 
 ;; ### CHEAT COMMAND ###
-(defvar cheat-root "~/.emacs.d/cheat/")
+(defvar cheat-root "~/.order66/cheat/")
 
 (defun cheat()
   (interactive)
   (view-file (concat cheat-root "cheat.md"))
-  )
+)
 
 (defun cheat-tmux()
   (interactive)
