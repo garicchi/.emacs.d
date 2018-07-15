@@ -195,10 +195,10 @@
      ))
 (neotree)
 
- flycheck
+;flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
- flycheck-pos-tip
+; flycheck-pos-tip
 (eval-after-load 'flycheck
   '(custom-set-variables
    '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
@@ -319,8 +319,8 @@
 ;; 置換
 (global-set-key (kbd "C-t") 'query-replace)
 
-;; anything
-(global-set-key (kbd "M-a") 'anything)
+;; helm
+(global-set-key (kbd "C-a") 'helm-mini)
 
 (global-set-key (kbd "C-,") 'scroll-up)
 (global-set-key (kbd "C-.") 'scroll-down)
