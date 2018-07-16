@@ -95,7 +95,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
-;; ファイル名保管で大文字小文字の違いを虫する
+;; ファイル名保管で大文字小文字の違いを無視する
 (setq completion-ignore-case t)
 
 ;; 起動時のフレーム設定
