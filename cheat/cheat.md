@@ -1,4 +1,0 @@
-# CHEAT
-```sh
-edcho "mogemoge"
-```
