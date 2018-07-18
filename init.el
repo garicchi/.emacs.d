@@ -302,10 +302,10 @@
 
 ;; スキップ移動
 
-;(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
-;(global-set-key (kbd "M-<up>") (kbd "C-u 5 C-<up>"))
-;(global-set-key (kbd "M-<right>") (kbd "C-u 5 <right>"))
-;(global-set-key (kbd "M-<left>") (kbd "C-u 5 <left>"))
+(global-set-key (kbd "ESC <down>") (kbd "C-u 5 <down>"))
+(global-set-key (kbd "ESC <up>") (kbd "C-u 5 <up>"))
+(global-set-key (kbd "ESC <right>") 'forward-word)
+(global-set-key (kbd "ESC <left>") 'backward-word)
 
 ;(global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
 ;(global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
@@ -320,7 +320,7 @@
 (global-set-key (kbd "C-t") 'query-replace)
 
 ;; helm
-(global-set-key (kbd "C-a") 'helm-mini)
+(global-set-key (kbd "C-m") 'helm-mini)
 
 (global-set-key (kbd "C-,") 'scroll-up)
 (global-set-key (kbd "C-.") 'scroll-down)
