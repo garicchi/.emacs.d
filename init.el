@@ -320,7 +320,7 @@
 (global-set-key (kbd "C-t") 'query-replace)
 
 ;; helm
-(global-set-key (kbd "C-m") 'helm-mini)
+(global-set-key (kbd "C-n") 'helm-mini)
 
 (global-set-key (kbd "C-,") 'scroll-up)
 (global-set-key (kbd "C-.") 'scroll-down)
