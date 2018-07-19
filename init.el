@@ -319,9 +319,6 @@
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
 
-;; 置換
-(global-set-key (kbd "C-t") 'query-replace)
-
 ;; helm
 (global-set-key (kbd "C-n") 'helm-mini)
 
@@ -342,7 +339,8 @@
 ;; (global-set-key (kbd "M-<tab>") 'switch-to-buffer)
 
 ;; multi-term
-(global-set-key (kbd "C-t") 'multi-term)
+(global-set-key (kbd "C-t") 'helm-mini)
+
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
