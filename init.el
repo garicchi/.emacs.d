@@ -116,6 +116,10 @@
 ;;(setq w2 (split-window w nil t))
 ;;(setq w3 (split-window w2 nil))
 
+(ido-mode 1)
+(ido-everywhere 1)
+
+(setq ido-enable-flex-matching t) ;; 中間/あいまい一致
 
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
@@ -165,8 +169,8 @@
              :ensure t)
 (use-package anzu
              :ensure t)
-(use-package helm
-             :ensure t)
+;(use-package helm
+;             :ensure t)
 (use-package flycheck-pos-tip
              :ensure t)
 (use-package company-go
@@ -175,8 +179,11 @@
   :ensure t)
 (use-package php-mode
   :ensure t)
+(use-package yaml-mode
+  :ensure t)
 
 
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; multi-term
 (setq multi-term-program shell-file-name)
@@ -239,7 +246,7 @@
 (load-theme 'monokai t)
 
 ;; helm
-(helm-mode 1)
+(helm-mode 0)
 (defvar helm-source-emacs-commands
   (helm-build-sync-source "Emacs commands"
     :candidates (lambda ()
@@ -269,9 +276,11 @@
                                helm-source-emacs-commands-history
                                helm-source-emacs-commands
                                )))
-(define-key global-map (kbd "M-x") 'helm-mini)
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
+
+(define-key global-map (kbd "M-x") 'helm-mini)
+(define-key global-map (kbd "C-x RET") 'helm-mini)
 
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
@@ -322,12 +331,6 @@
 ;; helm
 (global-set-key (kbd "C-n") 'helm-mini)
 
-(global-set-key (kbd "C-,") 'scroll-up)
-(global-set-key (kbd "C-.") 'scroll-down)
-
-;; バッファの末尾と最初に移動
-(global-set-key (kbd "M-,") 'beginning-of-buffer)
-(global-set-key (kbd "M-.") 'end-of-buffer)
 
 ;; カーソル移動コマンド
 ;;(global-set-key "\C-h" 'backward-char)
@@ -337,9 +340,6 @@
 
 ;; バッファリスト
 ;; (global-set-key (kbd "M-<tab>") 'switch-to-buffer)
-
-;; multi-term
-(global-set-key (kbd "C-t") 'helm-mini)
 
 
 ;; バッファリストを別ウインドウで開かないようにする
