@@ -121,6 +121,9 @@
 
 (setq ido-enable-flex-matching t) ;; 中間/あいまい一致
 
+;; リージョン内を置換するように
+(setq transient-mark-mode t)
+
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
 
@@ -344,7 +347,7 @@
 
 ;; バッファリストを別ウインドウで開かないようにする
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
-(global-set-key (kbd "C-b") 'buffer-menu)
+(global-set-key (kbd "C-b") 'buffer-list)
 
 
 ;; eww
@@ -383,8 +386,9 @@
 (global-set-key (kbd "C-x r") 'window-resizer)
 
 ;; neotree
-(global-set-key (kbd "C-c C-d") 'neotree-delete-node)
-(global-set-key (kbd "C-c C-r") 'neotree-rename-node)
+(global-set-key (kbd "C-c d") 'neotree-delete-node)
+(global-set-key (kbd "C-c r") 'neotree-rename-node)
+(global-set-key (kbd "C-c p") 'neotree-copy-node)
 
 ;; ### CHEAT COMMAND ###
 (defvar cheat-root "~/.order66/cheat/")
