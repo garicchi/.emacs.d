@@ -1,3 +1,4 @@
+
 ;;   ####  共通設定  ####
 
 ;; elispを入れるパスを指定
@@ -17,7 +18,6 @@
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120 124 128))
 (global-set-key (kbd "<backtab>")  'backtab-to-tab-stop)
-(global-set-key (kbd "<tab>") 'tab-to-tab-stop)
 ;; backtab
 (defun backtab-to-tab-stop ()
   "Do back to previous tab-stop"
@@ -41,7 +41,7 @@
 (menu-bar-mode -1)
 
 ;; ツールバー削除
-;(tool-bar-mode 0)
+(tool-bar-mode 0)
 
 ;; スタートメッセージを表示させない
 (setq inhibit-startup-message t)
@@ -52,6 +52,9 @@
 
 ;; 自動保存ファイルを削除する
 (setq delete-auto-save-files t)
+
+;; ロックファイルを作成しない
+(setq create-lockfiles nil)
 
 ;; 改行コードを表示する
 (setq eol-mnemonic-dos "(CRLF)")
@@ -99,17 +102,17 @@
 (setq completion-ignore-case t)
 
 ;; 起動時のフレーム設定
-(setq initial-frame-alist
-   (append (list
-      '(top . 0)
-      '(left . 0)
-      '(width . 800)
-      '(height . 600)
-	  )
-	  initial-frame-alist
-	  )
-   )
-(setq default-frame-alist initial-frame-alist)
+;;(setq initial-frame-alist
+;;   (append (list
+;;      '(top . 0)
+;;      '(left . 0)
+;;      '(width . 800)
+;;      '(height . 600)
+;;	  )
+;;	  initial-frame-alist
+;;	  )
+;;   )
+;;(setq default-frame-alist initial-frame-alist)
 
 ;; 起動時に分割
 ;;(setq w (selected-window))
@@ -172,8 +175,8 @@
              :ensure t)
 (use-package anzu
              :ensure t)
-;(use-package helm
-;             :ensure t)
+(use-package helm
+             :ensure t)
 (use-package flycheck-pos-tip
              :ensure t)
 (use-package company-go
@@ -183,6 +186,8 @@
 (use-package php-mode
   :ensure t)
 (use-package yaml-mode
+  :ensure t)
+(use-package dockerfile-mode
   :ensure t)
 
 
@@ -327,8 +332,9 @@
 ;(global-set-key (kbd "M-}") 'forward-word)
 ;(global-set-key (kbd "M-+") 'backward-word)
 
-;; コピー
+;; コピ
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
+(global-set-key (kbd "C-S-w") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
 
 ;; helm

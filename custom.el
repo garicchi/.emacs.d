@@ -9,7 +9,7 @@
     (helm-source-buffers-list helm-source-recentf helm-source-files-in-current-dir helm-source-emacs-commands-history helm-source-emacs-commands)))
  '(package-selected-packages
    (quote
-    (yaml-mode yml-mode php-completion php-mode web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode json-mode helm flycheck-pos-tip company-go anzu all-the-icons))))
+    (dockerfile-mode yaml-mode yml-mode php-completion php-mode web-mode use-package undo-tree smooth-scroll powerline neotree multi-term monokai-theme markdown-mode json-mode helm flycheck-pos-tip company-go anzu all-the-icons))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,0 +1,71 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/Users/togai-r/proj/pipe/package-builder/" . "builder/")
+ ("/Users/togai-r/ws/wp-docker/nginx/" . "html/")
+ ("/Users/togai-r/ws/wp-docker/" . "php/")
+ ("/Users/togai-r/" . ".order66/")
+ ("/Users/togai-r/proj/note/" . "parallel/")
+ ("/Users/togai-r/proj/pipe/docs/tutorial/parallel/" . "img/")
+ ("/Users/togai-r/proj/pipe/docs/tutorial/update/" . "img/")
+ ("/Users/togai-r/proj/pipe/docs/tutorial/package/" . "img/")
+ ("/Users/togai-r/proj/pipe/docs/tutorial/localdebug/" . "img/")
+ ("/Users/togai-r/proj/pipe/docs/tutorial/" . "package/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ 
+)
+
+;; ----- ido-work-file-list -----
+(
+ 
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/Users/togai-r/ws/" (23406 26473 846241 87000) "test1.json~" "wp-docker/" "test.php" "test1.json" "ll_compose.sh" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/package-builder/builder/" (23412 63897 925341 963000) ".idea/" "Pipfile.lock" "builder/" "data/" "Dockerfile.builder" "fixtures/" "aws.yml.sample" ".venv/" ".style.yapf" "aws.yml" "gunicorn.py" ".dockerignore" "schema/" "Pipfile" "README.md" "Dockerfile.web" "tests/" "requirements-web.txt" "Makefile" "bin/" ".pytest_cache/" "requirements.txt" "builder.sh" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/package-builder/" (23412 63902 515967 933000) ".idea/" "tmp/" "builder/" "data/" ".git/" "docker-compose.yml" ".env.db" "db/" "mysql/" ".gitignore" "README.md" ".pytest_cache/" ".DS_Store" "jenkins-script.sh" ".env.db.default" "../" "./")
+
+ ("/Users/togai-r/ws/wp-docker/nginx/html/" (23406 35733 127289 607000) "index.html" "../" "./")
+
+ ("/Users/togai-r/ws/wp-docker/nginx/" (23406 31211 360826 324000) "default.conf" "Dockerfile" "../" "./")
+
+ ("/Users/togai-r/ws/wp-docker/" (23406 26649 969200 584000) "docker-compose.yml" "mysql/" "nginx/" "../" "./")
+
+ ("/Users/togai-r/.order66/" (23404 59128 173675 232000) ".git/" "ssh-config" "env.sh" "karabiner_back2.json" "scripts/" ".gitignore" "karabiner_back.json" "zshrc" "README.md" "cheat/" "bashrc" "install.sh" "git-ignore" "../" "./")
+
+ ("/Users/togai-r/.config/git/" (23401 10309 35618 941000) "ignore" "../" "./")
+
+ ("/Users/togai-r/" (23402 29663 61930 404000) "ws/" ".viminfo" ".bash_history" ".gitconfig" ".cache/" "java_error_in_pycharm.hprof" ".python_history" "Downloads/" ".oh-my-zsh/" ".vsts/" ".vscode/" ".mono/" ".mysql_history" ".pyenv/" ".zcompdump-PC-2887-5.5.1" "Documents/" ".npm/" ".keras/" ".zcompdump" "gd/" ".Trash/" ".gradle/" "Applications/" ".dotnet/" "Movies/" ".ssh/" ".gitignore_global~" "Public/" ".sqlite_history" "log.txt" ".bash_sessions/" ".cups/" ".gitignore_global" ".dlv/" ".android/" ".node_repl_history" ".emacs.d/" ".order66/" ".IdentityService/" ".oracle_jre_usage/" "OjHEC7gC_400x400.jpg" ".lesshst" ".matplotlib/" "Library/" "Desktop/" ".zsh_history" ".nuget/" "progress.sh" ".zplug/" "Pictures/" ".local/" ".templateengine/" "note.md" ".ServiceHub/" ".omnisharp/" ".zshrc" ".bashrc" ".rbenv/" ".thumbnails/" "test.el" ".DS_Store" ".virtualenvs/" ".node-gyp/" ".docker/" ".zcompdump-PC-2887-5.3" "Music/" ".config/" "proj/" "../" "./")
+
+ ("/Users/togai-r/.ssh/" (23402 20519 380659 181000) "known_hosts" "id_rsa.pub" "id_rsa" "config" "../" "./")
+
+ ("/Users/togai-r/proj/nippou/reports/" (23396 13403 931611 398000) "2018-07-20.md" "20180725.md" "20180802.md" "2018-07-04.md" "2018-07-24.md" "2018-07-10.md" "20180731.md" "2018-07-11.md" "20180730.md" "20180803.md" "2018-07-05.md" "2018-07-18.md" "2018-07-19.md" "2018-07-09.md" "2018-07-12.md" "00-template.md" "2018-07-02.md" "20180727.md" "2018-07-06.md" "2018-07-17.md" "2018-07-23.md" "20180726.md" "20180801.md" "2018-06-29.md" "2018-07-13.md" "2018-07-03.md" "../" "./")
+
+ ("/Users/togai-r/.gradle/" (23384 8212 460092 80000) "caches/" "daemon/" "wrapper/" "native/" "../" "./")
+
+ ("/Users/togai-r/proj/note/parallel/" (23395 55787 111001 346000) "../" "./")
+
+ ("/Users/togai-r/proj/note/" (23384 1282 574021 13000) "package/" ".git/" "ll-sim/" "Pipfile" "ll-docker/" "pipe-inst/" "inbox.md" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/package/" (23395 48768 224122 630000) "package.md" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/" (23394 40805 805462 355000) "localdebug/" "binarybuild/" "simulator/" "architecture/" "README.md" "update/" "parallel/" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/parallel/" (23394 40813 870404 331000) "parallel.md" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/update/" (23393 21464 576682 159000) "update.md" "img/" ".#update.md" "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/binarybuild/" (23392 2815 764465 547000) "../" "./")
+
+ ("/Users/togai-r/proj/pipe/docs/tutorial/localdebug/" (23391 63947 202694 206000) ".#localdebug.md" "localdebug.md" "img/" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
