@@ -119,13 +119,13 @@
 ;;(setq w2 (split-window w nil t))
 ;;(setq w3 (split-window w2 nil))
 
-(ido-mode 1)
-(ido-everywhere 1)
+;(ido-mode 1)
+;(ido-everywhere 1)
 
-(setq ido-enable-flex-matching t) ;; 中間/あいまい一致
+;(setq ido-enable-flex-matching t) ;; 中間/あいまい一致
 
 ;; リージョン内を置換するように
-(setq transient-mark-mode t)
+;(setq transient-mark-mode t)
 
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
@@ -189,9 +189,15 @@
   :ensure t)
 (use-package dockerfile-mode
   :ensure t)
+(use-package nginx-mode
+  :ensure t)
+(use-package groovy-mode
+  :ensure t)
 
 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\Jenkinsfile$" . groovy-mode))
+
 
 ;; multi-term
 (setq multi-term-program shell-file-name)
@@ -322,17 +328,17 @@
 
 ;; スキップ移動
 
-(global-set-key (kbd "ESC <down>") (kbd "C-u 5 <down>"))
-(global-set-key (kbd "ESC <up>") (kbd "C-u 5 <up>"))
-(global-set-key (kbd "ESC <right>") 'forward-word)
-(global-set-key (kbd "ESC <left>") 'backward-word)
+(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
+(global-set-key (kbd "M-<up>") (kbd "C-u 5 <up>"))
+(global-set-key (kbd "M-<right>") 'forward-word)
+(global-set-key (kbd "M-<left>") 'backward-word)
 
 ;(global-set-key (kbd "M-*") (kbd "C-u 5 <down>"))
 ;(global-set-key (kbd "M-`") (kbd "C-u 5 <up>"))
 ;(global-set-key (kbd "M-}") 'forward-word)
 ;(global-set-key (kbd "M-+") 'backward-word)
 
-;; コピ
+;; コピー
 (global-set-key (kbd "C-q") 'copy-region-as-kill)
 (global-set-key (kbd "C-S-w") 'copy-region-as-kill)
 ;; (global-set-key (kbd "C-r") 'yank)
