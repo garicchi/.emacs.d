@@ -81,6 +81,8 @@
 (setq markdown-command "/usr/local/bin/multimarkdown")
 ;;(define-key markdown-mode-map (kbd "S-<tab>") nil)
 
+(setq mac-option-key-is-meta t)
+
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
 (setq-default truncate-partial-width-windows nil)
@@ -125,7 +127,7 @@
 ;(setq ido-enable-flex-matching t) ;; 中間/あいまい一致
 
 ;; リージョン内を置換するように
-;(setq transient-mark-mode t)
+(setq transient-mark-mode t)
 
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
