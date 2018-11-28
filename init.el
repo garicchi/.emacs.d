@@ -129,6 +129,9 @@
 ;; リージョン内を置換するように
 (setq transient-mark-mode t)
 
+;; エラー音をならなくする
+(setq ring-bell-function 'ignore)
+
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
 
@@ -162,7 +165,8 @@
                (message "Quit")
                (throw 'end-flag t)))))))
 
-
+;; scratchの初期メッセージ消去
+(setq initial-scratch-message "")
 
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
@@ -233,11 +237,21 @@
   :config
   (setq multi-term-program shell-file-name)
   )
-(use-package monokai-theme
+;(use-package monokai-theme
+;  :ensure t
+;  :config
+;  (load-theme 'monokai t)
+;  )
+;(use-package darcula-theme
+;  :ensure t
+;  :init (load-theme 'darcula t)
+;  )
+(use-package color-theme-sanityinc-tomorrow
   :ensure t
-  :config
-  (load-theme 'monokai t)
+  :init (load-theme 'sanityinc-tomorrow-eighties)
   )
+
+
 (use-package markdown-mode
   :ensure t)
 (use-package go-mode
@@ -252,8 +266,8 @@
   )
 (use-package company
   :ensure t
+  :init (global-company-mode) ; 全バッファで有効にする
   :config
-  (global-company-mode) ; 全バッファで有効にする
   (setq company-idle-delay 0) ; デフォルトは0.5
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
@@ -265,8 +279,7 @@
   :ensure t)
 (use-package anzu
   :ensure t
-  :config
-  (global-anzu-mode +1)
+  :init (global-anzu-mode +1)
   )
 (use-package helm
   :ensure t
@@ -348,17 +361,27 @@
   (add-hook 'c-mode-common-hook 'my-c-mode-hook) 
 
   )
+(use-package git-gutter+
+  :ensure t
+  :init (global-git-gutter+-mode)
+  )
+
+(use-package golden-ratio
+  :ensure t
+  :init (golden-ratio-mode t)
+  :config
+  ;(add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
+)
 
 ;;   ###  キーバインド設定 ###
 
 ;; ウインドウ分割
-(global-set-key (kbd "C-d") 'split-window-horizontally)
 (global-set-key (kbd "M-d") 'split-window-vertically)
 (global-set-key (kbd "C-f") 'other-window)
+(global-set-key (kbd "C-d") 'other-window)
 
 
 ;; スキップ移動
-
 (global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
 (global-set-key (kbd "M-<up>") (kbd "C-u 5 <up>"))
 (global-set-key (kbd "M-<right>") 'forward-word)
@@ -388,6 +411,11 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
+;;   ### diffを見やすく ###
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
 
 ;; ### CHEAT COMMAND ###
 (defvar cheat-root "~/.order66/cheat/")
@@ -416,4 +444,6 @@
   (interactive)
   (view-file (concat cheat-root "cheat-rsync.md"))
   )
+
+
 
