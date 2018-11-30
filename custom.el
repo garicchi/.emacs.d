@@ -12,7 +12,7 @@
     (helm-source-buffers-list helm-source-recentf helm-source-ls-git helm-source-files-in-current-dir helm-source-emacs-commands-history helm-source-emacs-commands)))
  '(package-selected-packages
    (quote
-    (helm-ag tabbar exec-path-from-shell company-jedi jedi dashboard golden-ratio golden-ratio-mode color-theme-sanityinc-tomorrow git-gutter+ darcula-theme yaml-mode web-mode use-package undo-tree smooth-scroll powerline php-mode nginx-mode neotree multi-term monokai-theme markdown-mode json-mode helm-ls-git helm-git-grep groovy-mode flycheck-pos-tip dockerfile-mode company-go company-emacs-eclim anzu all-the-icons))))
+    (swiper-helm dumb-jump helm-ag tabbar exec-path-from-shell company-jedi jedi dashboard golden-ratio golden-ratio-mode color-theme-sanityinc-tomorrow git-gutter+ darcula-theme yaml-mode web-mode use-package undo-tree smooth-scroll powerline php-mode nginx-mode neotree multi-term monokai-theme markdown-mode json-mode helm-ls-git helm-git-grep groovy-mode flycheck-pos-tip dockerfile-mode company-go company-emacs-eclim anzu all-the-icons))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

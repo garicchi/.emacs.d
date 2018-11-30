@@ -318,8 +318,9 @@
   )
 (use-package helm
   :ensure t
+  :init
+  (helm-mode t)
   :config
-  (helm-mode 0)
   (defvar helm-source-emacs-commands
     (helm-build-sync-source "Emacs commands"
       :candidates (lambda ()
@@ -349,15 +350,16 @@
                                  helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
-                                 helm-source-do-ag
                                  )))
   (setq helm-buffers-fuzzy-matching t
-        helm-recentf-fuzzy-match    t)
-
+        helm-recentf-fuzzy-match t
+   )
+  (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
   (bind-key* "M-x" 'helm-mini)
   (bind-key* "C-x RET" 'helm-mini)
   (bind-key* "C-x f" 'helm-find-files)
   (bind-key* "C-x b" 'helm-buffers-list)
+  (bind-key* "C-x a" 'helm-do-grep-ag)
   )
 (use-package flycheck-pos-tip
   :ensure t)
@@ -450,6 +452,20 @@
   (bind-key "C-x d" 'jedi:goto-definition jedi-mode-map)
   :init
   (add-hook 'python-mode-hook 'jedi:setup)
+  )
+
+(use-package dumb-jump
+  :config
+  ;(setq dumb-jump-selector 'ivy)
+  (setq dumb-jump-selector 'helm)
+  (bind-key "C-x d" 'dumb-jump-go)
+  :ensure t
+  )
+
+(use-package swiper
+  :ensure t
+  :config
+  (bind-key* "C-s" 'swiper)
   )
 
 ;(use-package golden-ratio
