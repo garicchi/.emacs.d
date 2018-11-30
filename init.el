@@ -110,9 +110,9 @@
 ;;      '(left . 0)
 ;;      '(width . 800)
 ;;      '(height . 600)
-;;	  )
-;;	  initial-frame-alist
-;;	  )
+;;)
+;;initial-frame-alist
+;;)
 ;;   )
 ;;(setq default-frame-alist initial-frame-alist)
 
@@ -189,6 +189,12 @@
   :ensure t)
 (use-package web-mode
   :ensure t)
+(use-package ruby-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\Vagrantfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+  )
 (use-package undo-tree
   :ensure t
   :config
@@ -219,16 +225,13 @@
   :config
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
-  (eval-after-load "neotree"
-    '(progn
-       (define-key neotree-mode-map (kbd "C-i") nil)
-       ))
-  (global-set-key (kbd "C-c c") 'neotree-create-node)
-  (global-set-key (kbd "C-c d") 'neotree-delete-node)
-  (global-set-key (kbd "C-c r") 'neotree-rename-node)
-  (global-set-key (kbd "C-c p") 'neotree-copy-node)
-  (global-set-key (kbd "C-c s") 'neotree-stretch-toggle)
-  (global-set-key (kbd "C-c t") 'neotree-toggle)
+  
+  (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
+  (bind-key "C-c d" 'neotree-delete-node neotree-mode-map)
+  (bind-key "C-c r" 'neotree-rename-node neotree-mode-map)
+  (bind-key "C-c p" 'neotree-copy-node neotree-mode-map)
+  (bind-key "C-c s" 'neotree-stretch-toggle neotree-mode-map)
+  (bind-key "C-c t" 'neotree-toggle neotree-mode-map)
 
   (neotree)
   )
@@ -251,6 +254,38 @@
   :init (load-theme 'sanityinc-tomorrow-eighties)
   )
 
+(use-package tabbar
+  :ensure t
+  :config
+  (tabbar-mwheel-mode nil)                  ;; マウスホイール無効
+  (setq tabbar-buffer-groups-function nil)  ;; グループ無効
+  (setq tabbar-use-images nil)              ;; 画像を使わない
+  ;;----- 左側のボタンを消す
+  (dolist (btn '(tabbar-buffer-home-button
+                 tabbar-scroll-left-button
+                 tabbar-scroll-right-button))
+    (set btn (cons (cons "" nil)
+                   (cons "" nil))))
+
+
+  ;;----- タブのセパレーターの長さ
+  (setq tabbar-separator '(1.0))
+  ;;----- 表示するバッファ
+  (defun my-tabbar-buffer-list ()
+    (delq nil
+          (mapcar #'(lambda (b)
+                      (cond
+                       ;; Always include the current buffer.
+                       ((eq (current-buffer) b) b)
+                       ((buffer-file-name b) b)
+                       ((char-equal ?\  (aref (buffer-name b) 0)) nil)
+                       ((equal "*scratch*" (buffer-name b)) b) ; *scratch*バッファは表示する
+                       ((char-equal ?* (aref (buffer-name b) 0)) nil) ; それ以外の * で始まるバッファは表示しない
+                       ((buffer-live-p b) b)))
+                  (buffer-list))))
+  ;(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
+  :init (tabbar-mode t)
+  )
 
 (use-package markdown-mode
   :ensure t)
@@ -259,7 +294,7 @@
 (use-package flycheck
   :ensure t
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)                                        ; flycheck-pos-tip
+  (add-hook 'after-init-hook #'global-flycheck-mode) ; flycheck-pos-tip
   (eval-after-load 'flycheck
     '(custom-set-variables
       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
@@ -310,17 +345,17 @@
   (custom-set-variables
    '(helm-mini-default-sources '(helm-source-buffers-list
                                  helm-source-recentf
+                                 helm-source-ls-git
                                  helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
-                                 helm-source-ls-git
                                  )))
   (setq helm-buffers-fuzzy-matching t
         helm-recentf-fuzzy-match    t)
 
-  (define-key global-map (kbd "M-x") 'helm-mini)
-  (define-key global-map (kbd "C-x RET") 'helm-mini)
-
+  (bind-key* "M-x" 'helm-mini)
+  (bind-key* "C-x RET" 'helm-mini)
+  (bind-key* "C-x f" 'helm-find-files)
   )
 (use-package flycheck-pos-tip
   :ensure t)
@@ -339,15 +374,14 @@
   :ensure t)
 (use-package nginx-mode
   :ensure t)
+(use-package helm-ag
+  :ensure t
+  )
 (use-package helm-git-grep
   :ensure t
   :config
-  (global-set-key (kbd "C-x g") 'helm-git-grep)
-  (eval-after-load 'helm
-    '(define-key helm-map (kbd "C-x g") 'helm-git-grep-from-helm))
-
-  (global-set-key (kbd "C-x l") 'helm-browse-project)
-
+  (global-set-key (kbd "C-x s") 'helm-git-grep)
+  (global-set-key (kbd "C-x g") 'helm-browse-project)
   )
 (use-package helm-ls-git
   :ensure t)
@@ -361,45 +395,104 @@
   (add-hook 'c-mode-common-hook 'my-c-mode-hook) 
 
   )
+
 (use-package git-gutter+
   :ensure t
   :init (global-git-gutter+-mode)
   )
 
-(use-package golden-ratio
-  :ensure t
-  :init (golden-ratio-mode t)
+(use-package whitespace
   :config
-  ;(add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
-)
+  ;; 空白を表示
+  (setq whitespace-style '(face           ; faceで可視化
+                                        ;trailing       ; 行末
+                           tabs           ; タブ
+                           spaces         ; スペース
+                           empty          ; 先頭/末尾の空行
+                                        ;space-mark     ; 表示のマッピング
+                           tab-mark
+                           ))
+  (defvar my/bg-color "#232323")
+  (set-face-attribute 'whitespace-trailing nil
+                      :background my/bg-color
+                      :foreground "DeepPink"
+                      :underline t)
+  (set-face-attribute 'whitespace-tab nil
+                      :background my/bg-color
+                      :foreground "LightSkyBlue"
+                      :underline t)
+  (set-face-attribute 'whitespace-space nil
+                      :background my/bg-color
+                      :foreground "GreenYellow"
+                      :weight 'bold)
+  (set-face-attribute 'whitespace-empty nil
+                      :background my/bg-color)
+  :init (global-whitespace-mode t)
+  )
+
+; PATHをシェルから引き継ぐ
+(use-package exec-path-from-shell
+  :ensure t
+  :init (exec-path-from-shell-initialize)
+  )
+
+; フォースを信じろ
+(use-package company-jedi
+  :ensure t
+  )
+
+(use-package jedi
+  :ensure t
+  :config
+  (setq jedi:complete-on-dot t)
+  (bind-key "C-x d" 'jedi:goto-definition jedi-mode-map)
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup)
+  )
+
+;(use-package golden-ratio
+;  :ensure t
+;  :init (golden-ratio-mode t)
+;  :config
+;  (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
+;  )
+
+;(use-package dashboard
+;  :ensure t
+;  :config
+;  (dashboard-setup-startup-hook)
+;  )
 
 ;;   ###  キーバインド設定 ###
 
 ;; ウインドウ分割
-(global-set-key (kbd "M-d") 'split-window-vertically)
-(global-set-key (kbd "C-f") 'other-window)
-(global-set-key (kbd "C-d") 'other-window)
+(bind-key* "M-d" 'split-window-vertically)
+(bind-key* "C-f" 'other-window)
+(bind-key* "C-d" 'other-window)
 
 
 ;; スキップ移動
-(global-set-key (kbd "M-<down>") (kbd "C-u 5 <down>"))
-(global-set-key (kbd "M-<up>") (kbd "C-u 5 <up>"))
-(global-set-key (kbd "M-<right>") 'forward-word)
-(global-set-key (kbd "M-<left>") 'backward-word)
+(bind-key* "M-<down>" (kbd "C-u 5 <down>"))
+(bind-key* "M-<up>" (kbd "C-u 5 <up>"))
+(bind-key* "M-<right>" 'forward-word)
+(bind-key* "M-<left>" 'backward-word)
+
+;; バッファ切り替え
+(bind-key* "C-x l" 'previous-buffer)
+(bind-key* "C-x :" 'next-buffer)
 
 ;; コピー
-(global-set-key (kbd "C-q") 'copy-region-as-kill)
-(global-set-key (kbd "C-S-w") 'copy-region-as-kill)
+(bind-key* "C-q" 'copy-region-as-kill)
 
 ;; バッファリストを別ウインドウで開かないようにする
-(global-set-key (kbd "C-x C-b") 'buffer-menu)
-(global-set-key (kbd "C-b") 'buffer-list)
+(bind-key* "C-x C-b" 'buffer-menu)
+(bind-key* "C-b" 'buffer-list)
 
 ;; eww
-(global-set-key (kbd "C-c g") 'eww)
+(bind-key* "C-c g" 'eww)
 
 ;; window resize
-(global-set-key (kbd "C-x r") 'window-resizer)
+(bind-key* "C-x r" 'window-resizer)
 
 
 ;;   ###  ファイルホック ###
