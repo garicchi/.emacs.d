@@ -349,6 +349,7 @@
                                  helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
+                                 helm-source-do-ag
                                  )))
   (setq helm-buffers-fuzzy-matching t
         helm-recentf-fuzzy-match    t)
@@ -356,6 +357,7 @@
   (bind-key* "M-x" 'helm-mini)
   (bind-key* "C-x RET" 'helm-mini)
   (bind-key* "C-x f" 'helm-find-files)
+  (bind-key* "C-x b" 'helm-buffers-list)
   )
 (use-package flycheck-pos-tip
   :ensure t)
@@ -486,7 +488,7 @@
 
 ;; バッファリストを別ウインドウで開かないようにする
 (bind-key* "C-x C-b" 'buffer-menu)
-(bind-key* "C-b" 'buffer-list)
+(bind-key* "C-b" 'list-buffers)
 
 ;; eww
 (bind-key* "C-c g" 'eww)
