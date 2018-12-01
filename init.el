@@ -1,4 +1,3 @@
-
 ;;   ####  共通設定  ####
 
 ;; elispを入れるパスを指定
@@ -65,7 +64,7 @@
 (global-linum-mode t)
 
 ;; 現在の行をハイライトする
-(global-hl-line-mode t)
+(global-hl-line-mode 0)
 
 ;; 対応するカッコをハイライトする
 (show-paren-mode 1)
@@ -168,6 +167,14 @@
 ;; scratchの初期メッセージ消去
 (setq initial-scratch-message "")
 
+;; terminal終了時の確認を消す
+(defun set-no-process-query-on-exit ()
+  (let ((proc (get-buffer-process (current-buffer))))
+    (when (processp proc)
+      (set-process-query-on-exit-flag proc nil))))
+
+(add-hook 'term-exec-hook 'set-no-process-query-on-exit)
+
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
 
@@ -210,13 +217,13 @@
 (use-package powerline
   :ensure t
   :config
-  (custom-set-faces
-   '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
-   '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
-   '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
-   '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
-   '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 140))))
-   )
+;  (custom-set-faces
+;   '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
+;   '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
+;   '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
+;   '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
+;   '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 140))))
+;   )
   )
 (use-package popup
   :ensure t)
@@ -239,6 +246,7 @@
   :ensure t
   :config
   (setq multi-term-program shell-file-name)
+  (bind-key "C-x t" 'multi-term)
   )
 ;(use-package monokai-theme
 ;  :ensure t
@@ -249,9 +257,13 @@
 ;  :ensure t
 ;  :init (load-theme 'darcula t)
 ;  )
-(use-package color-theme-sanityinc-tomorrow
+;(use-package color-theme-sanityinc-tomorrow
+;  :ensure t
+;  :init (load-theme 'sanityinc-tomorrow-eighties)
+                                        ;)
+(use-package nord-theme
   :ensure t
-  :init (load-theme 'sanityinc-tomorrow-eighties)
+  :init (load-theme 'nord t)
   )
 
 (use-package tabbar
@@ -284,7 +296,7 @@
                        ((buffer-live-p b) b)))
                   (buffer-list))))
   ;(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
-  :init (tabbar-mode t)
+  :init (tabbar-mode 0)
   )
 
 (use-package markdown-mode
@@ -315,6 +327,12 @@
 (use-package anzu
   :ensure t
   :init (global-anzu-mode +1)
+  )
+(use-package highlight-symbol
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+  (setq highlight-symbol-idle-delay 1.0)
   )
 (use-package helm
   :ensure t
@@ -418,19 +436,20 @@
                            ))
   (defvar my/bg-color "#232323")
   (set-face-attribute 'whitespace-trailing nil
-                      :background my/bg-color
+                      ;:background my/bg-color
                       :foreground "DeepPink"
                       :underline t)
   (set-face-attribute 'whitespace-tab nil
-                      :background my/bg-color
+                      ;:background my/bg-color
                       :foreground "LightSkyBlue"
                       :underline t)
   (set-face-attribute 'whitespace-space nil
-                      :background my/bg-color
+                      ;:background my/bg-color
                       :foreground "GreenYellow"
                       :weight 'bold)
   (set-face-attribute 'whitespace-empty nil
-                      :background my/bg-color)
+                                        ;:background my/bg-color
+                      )
   :init (global-whitespace-mode t)
   )
 
@@ -488,6 +507,10 @@
 (bind-key* "C-f" 'other-window)
 (bind-key* "C-d" 'other-window)
 
+(bind-key* "C-x l" 'windmove-left)
+(bind-key* "C-x :" 'windmove-right)
+(bind-key* "C-x p" 'windmove-up)
+(bind-key* "C-x ;" 'windmove-down)
 
 ;; スキップ移動
 (bind-key* "M-<down>" (kbd "C-u 5 <down>"))
@@ -495,19 +518,41 @@
 (bind-key* "M-<right>" 'forward-word)
 (bind-key* "M-<left>" 'backward-word)
 
-;; バッファ切り替え
-(bind-key* "C-x l" 'previous-buffer)
-(bind-key* "C-x :" 'next-buffer)
-
 ;; コピー
 (bind-key* "C-q" 'copy-region-as-kill)
 
-;; バッファリストを別ウインドウで開かないようにする
 (bind-key* "C-x C-b" 'buffer-menu)
 (bind-key* "C-b" 'list-buffers)
 
+;; バッファ移動
+(bind-key* "C-t" 'previous-buffer)
+
 ;; eww
-(bind-key* "C-c g" 'eww)
+(bind-key* "C-x w" 'eww)
+
+;; ewwを複数起動
+(defun eww-mode-hook--rename-buffer ()
+  "Rename eww browser's buffer so sites open in new page."
+  (rename-buffer "eww" t))
+(add-hook 'eww-mode-hook 'eww-mode-hook--rename-buffer)
+
+;; ewwの背景色をなんとかする
+(defvar eww-disable-colorize t)
+(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+  (unless eww-disable-colorize
+    (funcall orig start end fg)))
+(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+(defun eww-disable-color ()
+  "eww で文字色を反映させない"
+  (interactive)
+  (setq-local eww-disable-colorize nil)
+  (eww-reload))
+(defun eww-enable-color ()
+  "eww で文字色を反映させる"
+  (interactive)
+  (setq-local eww-disable-colorize t)
+  (eww-reload))
 
 ;; window resize
 (bind-key* "C-x r" 'window-resizer)
