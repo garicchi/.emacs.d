@@ -75,16 +75,11 @@
 ;; クリップボードをシステムと共有する
 (setq x-select-enable-clipboard t)
 
-;; Markdown Modeの有効化
-(add-to-list 'auto-mode-alist'("\\.md\\'" . markdown-mode))
-(setq markdown-command "/usr/local/bin/multimarkdown")
-;;(define-key markdown-mode-map (kbd "S-<tab>") nil)
-
 (setq mac-option-key-is-meta t)
 
 ;; はみ出した表示をウインドウの右端で折り返さない
-(setq-default truncate-lines nil)
-(setq-default truncate-partial-width-windows nil)
+(setq-default truncate-lines t)
+(setq-default truncate-partial-width-windows t)
 
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
@@ -174,6 +169,7 @@
       (set-process-query-on-exit-flag proc nil))))
 
 (add-hook 'term-exec-hook 'set-no-process-query-on-exit)
+
 
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
@@ -299,8 +295,13 @@
   :init (tabbar-mode 0)
   )
 
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-preview-mode
+  :ensure t
+  :config
+  (setq markdown-preview-stylesheets (list "github.css"))
+  (setq markdown-command "multimarkdown")
+  (bind-key "C-c p" 'markdown-preview-mode markdown-mode-map)
+  )
 (use-package go-mode
   :ensure t)
 (use-package flycheck
