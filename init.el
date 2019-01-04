@@ -55,6 +55,9 @@
 ;; ロックファイルを作成しない
 (setq create-lockfiles nil)
 
+;; エラー音をならなくする
+(setq ring-bell-function 'ignore)
+
 ;; 改行コードを表示する
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")
@@ -78,8 +81,11 @@
 (setq mac-option-key-is-meta t)
 
 ;; はみ出した表示をウインドウの右端で折り返さない
-(setq-default truncate-lines t)
-(setq-default truncate-partial-width-windows t)
+(setq-default truncate-lines nil)
+(setq-default truncate-partial-width-windows nil)
+
+(add-hook 'term-mode-hook
+      (lambda () (setq truncate-lines t)))
 
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
@@ -170,7 +176,6 @@
 
 (add-hook 'term-exec-hook 'set-no-process-query-on-exit)
 
-
 ;;  ###  パッケージ設定  ###
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
 
@@ -203,6 +208,7 @@
   :config
   (global-undo-tree-mode)
   )
+
 (use-package smooth-scroll
   :ensure t
   :config
@@ -213,13 +219,55 @@
 (use-package powerline
   :ensure t
   :config
-;  (custom-set-faces
-;   '(mode-line ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
-;   '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
-;   '(powerline-active1 ((t (:foreground "#f9f9f9" :background "#666666" :box nil :height 140))))
-;   '(powerline-active2 ((t (:foreground "#f9f9f9" :background "#AD1457" :box nil :height 140))))
-;   '(powerline-active0 ((t (:foreground "#f9f9f9" :background "#880E4F" :box nil :height 140))))
-;   )
+  (defun powerline-my-theme ()
+    "Setup the my mode-line."
+    (interactive)
+    (setq powerline-current-separator 'utf-8)
+    (setq-default mode-line-format
+                  '("%e"
+                    (:eval
+                     (let* ((active (powerline-selected-window-active))
+                            (mode-line (if active 'mode-line 'mode-line-inactive))
+                            (face1 (if active 'mode-line-1-fg 'mode-line-2-fg))
+                            (face2 (if active 'mode-line-1-arrow 'mode-line-2-arrow))
+                            (separator-left (intern (format "powerline-%s-%s"
+                                                            (powerline-current-separator)
+                                                            (car powerline-default-separator-dir))))
+                            (lhs (list (powerline-raw " " face1)
+                                       (powerline-major-mode face1)
+                                       (powerline-raw " " face1)
+                                       (funcall separator-left face1 face2)
+                                       (powerline-buffer-id nil )
+                                       (powerline-raw " [ ")
+                                       (powerline-raw mode-line-mule-info nil)
+                                       (powerline-raw "%*")
+                                       (powerline-raw " |")
+                                       (powerline-process nil)
+                                       (powerline-vc)
+                                       (powerline-raw " ]")
+                                       ))
+                            (rhs (list (powerline-raw "%4l")
+                                       (powerline-raw ":")
+                                       (powerline-raw "%2c")
+                                       (powerline-raw " | ")                                  
+                                       (powerline-raw "%6p")
+                                       (powerline-raw " ")
+                                       )))
+                       (concat (powerline-render lhs)
+                               (powerline-fill nil (powerline-width rhs)) 
+                               (powerline-render rhs)))))))
+  (powerline-my-theme)
+  
+
+(defun make/set-face (face-name fg-color bg-color weight)
+  (make-face face-name)
+  (set-face-attribute face-name nil
+                      :foreground fg-color :background bg-color :box nil :weight weight))
+(make/set-face 'mode-line-1-fg "#282C34" "#EF8300" 'bold)
+(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#3E4451" 'bold)
+(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
+
   )
 (use-package popup
   :ensure t)
@@ -228,6 +276,7 @@
   :config
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
+  (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
   
   (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
   (bind-key "C-c d" 'neotree-delete-node neotree-mode-map)
@@ -236,6 +285,8 @@
   (bind-key "C-c s" 'neotree-stretch-toggle neotree-mode-map)
   (bind-key "C-c t" 'neotree-toggle neotree-mode-map)
 
+  (bind-key* "C-n" 'neotree-refresh)
+  
   (neotree)
   )
 (use-package multi-term
@@ -393,6 +444,23 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
   )
+
+(use-package glsl-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode))
+  )
+
+(use-package company-glsl
+  :ensure t
+  )
+
+(use-package terraform-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tf$" . terraform-mode))
+  )
+
 (use-package dockerfile-mode
   :ensure t)
 (use-package nginx-mode
@@ -442,8 +510,8 @@
                       :underline t)
   (set-face-attribute 'whitespace-tab nil
                       ;:background my/bg-color
-                      :foreground "LightSkyBlue"
-                      :underline t)
+                      :foreground "#4c566a"
+                      :underline nil)
   (set-face-attribute 'whitespace-space nil
                       ;:background my/bg-color
                       :foreground "GreenYellow"
@@ -488,6 +556,17 @@
   (bind-key* "C-s" 'swiper)
   )
 
+(use-package plantuml-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
+  (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+  (setq plantuml-java-options "")
+  (setq plantuml-output-type "png")
+  (setq plantuml-options "-charset UTF-8")
+  )
+
+
 ;(use-package golden-ratio
 ;  :ensure t
 ;  :init (golden-ratio-mode t)
@@ -505,28 +584,54 @@
 
 ;; ウインドウ分割
 (bind-key* "M-d" 'split-window-vertically)
-(bind-key* "C-f" 'other-window)
 (bind-key* "C-d" 'other-window)
+(bind-key* "C-f" 'other-window)
+(bind-key* "C-<tab>" 'other-window)
 
 (bind-key* "C-x l" 'windmove-left)
 (bind-key* "C-x :" 'windmove-right)
 (bind-key* "C-x p" 'windmove-up)
 (bind-key* "C-x ;" 'windmove-down)
 
+;; ウインドウ最大化
+
+;; 画面のが最大化されている or NOTの状態を保持
+(defvar is-window-maximized nil)
+
+;; 1. 最大化されている場合
+;;  -> `balance-windows` で画面のバランスを調整
+;; 2. 最大化されていない場合
+;;  -> `maximize-window` で画面を最大化
+
+(defun window-toggle-max ()
+  (interactive) ;; 補足あり
+  (progn
+    (if is-window-maximized
+      (balance-windows)
+    (maximize-window))
+  (setq is-window-maximized (not is-window-maximized))))
+
+(bind-key* "C-x m" 'window-toggle-max)
+
 ;; スキップ移動
 (bind-key* "M-<down>" (kbd "C-u 5 <down>"))
 (bind-key* "M-<up>" (kbd "C-u 5 <up>"))
 (bind-key* "M-<right>" 'forward-word)
 (bind-key* "M-<left>" 'backward-word)
+;; たーみなる
+(bind-key* "ESC <down>" (kbd "C-u 5 <down>"))
+(bind-key* "ESC <up>" (kbd "C-u 5 <up>"))
+
+
 
 ;; コピー
 (bind-key* "C-q" 'copy-region-as-kill)
 
 (bind-key* "C-x C-b" 'buffer-menu)
-(bind-key* "C-b" 'list-buffers)
+;(bind-key* "C-b" 'list-buffers)
 
 ;; バッファ移動
-(bind-key* "C-t" 'previous-buffer)
+(bind-key* "C-b" 'previous-buffer)
 
 ;; eww
 (bind-key* "C-x w" 'eww)
