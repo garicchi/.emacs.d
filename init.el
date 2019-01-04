@@ -284,6 +284,7 @@
   (bind-key "C-c p" 'neotree-copy-node neotree-mode-map)
   (bind-key "C-c s" 'neotree-stretch-toggle neotree-mode-map)
   (bind-key "C-c t" 'neotree-toggle neotree-mode-map)
+  (bind-key "C-c n" 'neotree-create-node neotree-mode-map)
 
   (bind-key* "C-n" 'neotree-refresh)
   
