@@ -387,6 +387,7 @@
   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
   (setq highlight-symbol-idle-delay 1.0)
   )
+
 (use-package helm
   :ensure t
   :init
@@ -426,12 +427,20 @@
         helm-recentf-fuzzy-match t
    )
   (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
-  (bind-key* "M-x" 'helm-mini)
+  (bind-key* "M-x" 'helm-M-x)
+  (bind-key* "C-x x" 'helm-M-x)
   (bind-key* "C-x RET" 'helm-mini)
   (bind-key* "C-x f" 'helm-find-files)
   (bind-key* "C-x b" 'helm-buffers-list)
   (bind-key* "C-x a" 'helm-do-grep-ag)
   )
+
+(use-package helm-descbinds
+  :ensure t
+  :init (helm-descbinds-mode)
+  )
+
+
 (use-package flycheck-pos-tip
   :ensure t)
 (use-package company-go
@@ -486,6 +495,11 @@
           c-basic-offset 4)) 
   (add-hook 'c-mode-common-hook 'my-c-mode-hook) 
 
+  )
+
+(use-package magit
+  :ensure t
+  :bind* ("C-x m" . magit-status)
   )
 
 (use-package git-gutter+
