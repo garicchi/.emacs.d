@@ -263,10 +263,10 @@
   (make-face face-name)
   (set-face-attribute face-name nil
                       :foreground fg-color :background bg-color :box nil :weight weight))
-(make/set-face 'mode-line-1-fg "#282C34" "#EF8300" 'bold)
-(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
-(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#3E4451" 'bold)
-(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
+;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
+;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
+;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
 
   )
 (use-package popup
@@ -309,9 +309,14 @@
 ;  :ensure t
 ;  :init (load-theme 'sanityinc-tomorrow-eighties)
                                         ;)
-(use-package nord-theme
-  :ensure t
-  :init (load-theme 'nord t)
+;(use-package nord-theme
+;  :ensure t
+;  :init (load-theme 'nord t)
+                                        ;  )
+
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-dark t)
   )
 
 (use-package tabbar
@@ -608,7 +613,10 @@
 (bind-key* "C-x p" 'windmove-up)
 (bind-key* "C-x ;" 'windmove-down)
 
-;; ウインドウ最大化
+(bind-key* "C-i" 'kill-buffer)
+
+(bind-key* "C-x p" 'previous-buffer)
+
 
 ;; 画面のが最大化されている or NOTの状態を保持
 (defvar is-window-maximized nil)
@@ -644,9 +652,6 @@
 
 (bind-key* "C-x C-b" 'buffer-menu)
 ;(bind-key* "C-b" 'list-buffers)
-
-;; バッファ移動
-(bind-key* "C-b" 'previous-buffer)
 
 ;; eww
 (bind-key* "C-x w" 'eww)
