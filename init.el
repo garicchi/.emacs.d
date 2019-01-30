@@ -1,7 +1,8 @@
-;;   ####  共通設定  ####
+;;
+;;   common setting
+;;
 
-;; elispを入れるパスを指定
-
+;; 独自のelispを入れるパスを設定
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
 ;; 日本語設定
@@ -84,6 +85,7 @@
 (setq-default truncate-lines nil)
 (setq-default truncate-partial-width-windows nil)
 
+;; term-modeで折り返さない
 (add-hook 'term-mode-hook
           (lambda () (setq truncate-lines t)))
 
@@ -121,11 +123,6 @@
 ;;(setq w2 (split-window w nil t))
 ;;(setq w3 (split-window w2 nil))
 
-                                        ;(ido-mode 1)
-                                        ;(ido-everywhere 1)
-
-                                        ;(setq ido-enable-flex-matching t) ;; 中間/あいまい一致
-
 ;; リージョン内を置換するように
 (setq transient-mark-mode t)
 
@@ -135,7 +132,32 @@
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
 
-;; ウインドウをリサイズできるようにする
+;; ewwを複数起動
+(defun eww-mode-hook--rename-buffer ()
+  "Rename eww browser's buffer so sites open in new page."
+  (rename-buffer "eww" t))
+(add-hook 'eww-mode-hook 'eww-mode-hook--rename-buffer)
+
+;; ewwの背景色をなんとかする
+(defvar eww-disable-colorize t)
+(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+  (unless eww-disable-colorize
+    (funcall orig start end fg)))
+(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+(defun eww-disable-color ()
+  "eww で文字色を反映させない"
+  (interactive)
+  (setq-local eww-disable-colorize nil)
+  (eww-reload))
+(defun eww-enable-color ()
+  "eww で文字色を反映させる"
+  (interactive)
+  (setq-local eww-disable-colorize t)
+  (eww-reload))
+
+
+;; window-resizerコマンド - ウインドウをリサイズできるようにする
 (defun window-resizer ()
   "Control window size and position."
   (interactive)
@@ -165,6 +187,17 @@
                (message "Quit")
                (throw 'end-flag t)))))))
 
+;; window-toggle-max ウインドウを最大化する
+(defvar is-window-maximized nil)
+
+(defun window-toggle-max ()
+  (interactive)
+  (progn
+    (if is-window-maximized
+        (balance-windows)
+      (maximize-window))
+    (setq is-window-maximized (not is-window-maximized))))
+
 ;; scratchの初期メッセージ消去
 (setq initial-scratch-message "")
 
@@ -176,10 +209,16 @@
 
 (add-hook 'term-exec-hook 'set-no-process-query-on-exit)
 
-;;  ###  パッケージ設定  ###
-;; http://emacs-jp.github.io/packages/package-management/package-el.html
+;;   ### diffを見やすく ###
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
 
-;; ###  パッケージ設定 ###
+;;
+;; package setting
+;; http://emacs-jp.github.io/packages/package-management/package-el.html
+;;
 
 ;; package.elを有効化
 (require 'package)
@@ -188,42 +227,54 @@
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
 
+;; use-package パッケージマネージャ
 (when (not (package-installed-p 'use-package))
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
 
+;; neotreeのいい感じのアイコン
 (use-package all-the-icons
   :ensure t)
-(use-package web-mode
-  :ensure t)
-(use-package ruby-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\Vagrantfile$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-  )
+
+;; undoをツリー表示してくれるやつ
 (use-package undo-tree
   :ensure t
   :config
+  (defun undo-tree-split-side-by-side (original-function &rest args)
+  "Split undo-tree side-by-side"
+  (let ((split-height-threshold nil)
+        (split-width-threshold 0))
+    (apply original-function args)))
+  (advice-add 'undo-tree-visualize :around #'undo-tree-split-side-by-side)
+  ;; visualizerはRETかC-gで終了
+  (define-key undo-tree-visualizer-mode-map (kbd "RET") 'undo-tree-visualizer-quit)
+  (define-key undo-tree-visualizer-mode-map (kbd "C-g") 'undo-tree-visualizer-quit)
+  
+  :init
   (global-undo-tree-mode)
   )
 
+;; カーソルを分身させるやつ
 (use-package multiple-cursors
   :ensure t
+  :bind* ("C-c C-m" . mc/mark-all-like-this)
   )
 
+;; 正規表現検索をビジュアル的に
 (use-package visual-regexp
   :ensure t
   )
 
+;; C-vとかのスクロールがスムーズになる
 (use-package smooth-scroll
   :ensure t
   :config
   (smooth-scroll-mode t)
   (setq smooth-scroll/vscroll-step-size 8)
-
   )
+
+;; モードラインがきれいになる
 (use-package powerline
   :ensure t
   :config
@@ -272,7 +323,7 @@
                                        (powerline-vc face1 'r)
                                        (powerline-major-mode face1 'l)
                                        (powerline-process face1)
-                                       ;(powerline-minor-modes face1 'l)
+                                        ;(powerline-minor-modes face1 'l)
                                        (powerline-narrow face1 'l)
                                        (powerline-raw " " face1)
                                        (funcall separator-left face1 face2)
@@ -291,20 +342,22 @@
                                (powerline-render rhs)))))))
   (powerline-my-theme)
   
-
-                                        ;(defun make/set-face (face-name fg-color bg-color weight)
-                                        ;  (make-face face-name)
-                                        ;  (set-face-attribute face-name nil
-                                        ;                      :foreground fg-color :background bg-color :box nil :weight weight))
-                                        ;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
-                                        ;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
-                                        ;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
-                                        ;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
-
+  ;; powerlineの色を変えたい時はここ
+  ;;(defun make/set-face (face-name fg-color bg-color weight)
+  ;;  (make-face face-name)
+  ;;  (set-face-attribute face-name nil
+  ;;                      :foreground fg-color :background bg-color :box nil :weight weight))
+  ;;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
+  ;;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+  ;;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
+  ;;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
   )
+
+;; flycheckとかでポップアップしてくれる
 (use-package popup
   :ensure t)
 
+;; 左側にでるファイラー
 (use-package neotree
   :ensure t
   :config
@@ -319,51 +372,59 @@
   (bind-key "C-c s" 'neotree-stretch-toggle neotree-mode-map)
   (bind-key "C-c t" 'neotree-toggle neotree-mode-map)
   (bind-key "C-c n" 'neotree-create-node neotree-mode-map)
-
-  (bind-key* "C-n" 'neotree-refresh)
+  (bind-key* "C-n" 'neotree-refresh) ;バッファで開いているところをneoteeのルートにする
   
   (neotree)
   )
+
+;; 複数開けるターミナル
 (use-package multi-term
   :ensure t
   :config
   (setq multi-term-program shell-file-name)
   (bind-key "C-x t" 'multi-term)
   )
-                                        ;(use-package monokai-theme
-                                        ;  :ensure t
-                                        ;  :config
-                                        ;  (load-theme 'monokai t)
-                                        ;  )
-                                        ;(use-package darcula-theme
-                                        ;  :ensure t
-                                        ;  :init (load-theme 'darcula t)
-                                        ;  )
-                                        ;(use-package color-theme-sanityinc-tomorrow
-                                        ;  :ensure t
-                                        ;  :init (load-theme 'sanityinc-tomorrow-eighties)
-                                        ;)
-                                        ;(use-package nord-theme
-                                        ;  :ensure t
-                                        ;  :init (load-theme 'nord t)
-                                        ;  )
 
+;;
+;; color theme
+;;
+
+;; spacemacsのテーマ。とてもよい
 (use-package spacemacs-theme
   :defer t
   :init (load-theme 'spacemacs-dark t)
   )
-                                        ;(use-package zenburn-theme
-                                        ;  :ensure t
-                                        ;  :init (load-theme 'zenburn t)
-                                        ;  )
 
+;;(use-package monokai-theme
+;;  :ensure t
+;;  :config
+;;  (load-theme 'monokai t)
+;;  )
+;;(use-package darcula-theme
+;;  :ensure t
+;;  :init (load-theme 'darcula t)
+;;  )
+;;(use-package color-theme-sanityinc-tomorrow
+;;  :ensure t
+;;  :init (load-theme 'sanityinc-tomorrow-eighties)
+;;)
+;;(use-package nord-theme
+;;  :ensure t
+;;  :init (load-theme 'nord t)
+;;  )
+;;(use-package zenburn-theme
+;;  :ensure t
+;;  :init (load-theme 'zenburn t)
+;;  )
+
+;; バッファをタブみたいに表示してくれるやつ
 (use-package tabbar
   :ensure t
   :config
   (tabbar-mwheel-mode nil)                  ;; マウスホイール無効
   (setq tabbar-buffer-groups-function nil)  ;; グループ無効
   (setq tabbar-use-images nil)              ;; 画像を使わない
-  ;;----- 左側のボタンを消す
+  ;; 左側のボタンを消す
   (dolist (btn '(tabbar-buffer-home-button
                  tabbar-scroll-left-button
                  tabbar-scroll-right-button))
@@ -371,9 +432,9 @@
                    (cons "" nil))))
 
 
-  ;;----- タブのセパレーターの長さ
+  ;; タブのセパレーターの長さ
   (setq tabbar-separator '(1.0))
-  ;;----- 表示するバッファ
+  ;; 表示するバッファ
   (defun my-tabbar-buffer-list ()
     (delq nil
           (mapcar #'(lambda (b)
@@ -390,6 +451,7 @@
   :init (tabbar-mode 0)
   )
 
+;; markdownをリアルタイムにプレビューしてくれる
 (use-package markdown-preview-mode
   :ensure t
   :config
@@ -397,8 +459,8 @@
   (setq markdown-command "multimarkdown")
   (bind-key "C-c p" 'markdown-preview-mode markdown-mode-map)
   )
-(use-package go-mode
-  :ensure t)
+
+;; 構文チェックとかしてくれる
 (use-package flycheck
   :ensure t
   :config
@@ -409,6 +471,8 @@
   (add-hook 'text-mode-hook 'flyspell-mode)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
+
+;; コード補完とかしてくれる
 (use-package company
   :ensure t
   :init (global-company-mode) ; 全バッファで有効にする
@@ -418,22 +482,21 @@
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   (add-to-list 'company-backends 'company-edbi)
   (global-set-key (kbd "C-<tab>") 'company-complete)
-
   )
-(use-package smooth-scroll
-  :ensure t)
 
+;; コードブロックごとにregionを作れる
 (use-package expand-region
   :ensure t
-  :bind* ("C-S-SPC" . er/expand-region)
+  :bind* ("C-c SPC" . er/expand-region)
   )
 
-(bind-key* "C-@" 'set-mark-command)
-
+;; 検索時に一致した数をモードラインに出してくれる
 (use-package anzu
   :ensure t
   :init (global-anzu-mode +1)
   )
+
+;; 単語にカーソルを置くと同じ単語をハイライトしてくれる
 (use-package highlight-symbol
   :ensure t
   :config
@@ -441,11 +504,13 @@
   (setq highlight-symbol-idle-delay 1.0)
   )
 
+;; 全てをインクリメンタルサーチ
 (use-package helm
   :ensure t
   :init
   (helm-mode t)
   :config
+  ;; emacsのコマンドを検索可能に
   (defvar helm-source-emacs-commands
     (helm-build-sync-source "Emacs commands"
       :candidates (lambda ()
@@ -457,6 +522,7 @@
       :action #'command-execute)
     "A simple helm source for Emacs commands.")
 
+  ;; emacsのコマンド履歴を検索可能に
   (defvar helm-source-emacs-commands-history
     (helm-build-sync-source "Emacs commands history"
       :candidates (lambda ()
@@ -468,6 +534,7 @@
       :action #'command-execute)
     "Emacs commands history")
 
+  ;; helm-mini時のソース一覧
   (custom-set-variables
    '(helm-mini-default-sources '(helm-source-buffers-list
                                  helm-source-recentf
@@ -476,10 +543,14 @@
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
                                  )))
+  ;; 曖昧マッチ
   (setq helm-buffers-fuzzy-matching t
         helm-recentf-fuzzy-match t
         )
+
+  ;; 下にウインドウとしてhelmを表示する
   (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
+  
   (bind-key* "M-x" 'helm-M-x)
   (bind-key* "C-x x" 'helm-M-x)
   (bind-key* "C-x RET" 'helm-mini)
@@ -488,57 +559,96 @@
   (bind-key* "C-x a" 'helm-do-grep-ag)
   )
 
+;; helm-M-xでキーバインドを表示してくれる
 (use-package helm-descbinds
   :ensure t
   :init (helm-descbinds-mode)
   )
 
-
-(use-package flycheck-pos-tip
-  :ensure t)
-(use-package company-go
-  :ensure t)
-(use-package json-mode
-  :ensure t)
-(use-package php-mode
-  :ensure t)
-(use-package yaml-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  )
-
-(use-package glsl-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode))
-  )
-
-(use-package company-glsl
-  :ensure t
-  )
-
-(use-package terraform-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.tf$" . terraform-mode))
-  )
-
-(use-package dockerfile-mode
-  :ensure t)
-(use-package nginx-mode
-  :ensure t)
+;; helmで高速ファイル中身サーチ(ag)
 (use-package helm-ag
   :ensure t
   )
+
+;; helmでgit grep
 (use-package helm-git-grep
   :ensure t
   :config
   (global-set-key (kbd "C-x s") 'helm-git-grep)
   (global-set-key (kbd "C-x g") 'helm-browse-project)
   )
+
+;; helmでgit ls
 (use-package helm-ls-git
   :ensure t)
+
+;; flycheckでポップアップウインドウを出してくれる
+(use-package flycheck-pos-tip
+  :ensure t)
+
+;; companyのgo拡張
+(use-package company-go
+  :ensure t)
+
+;; go-mode
+(use-package go-mode
+  :ensure t)
+
+;; web-mode
+(use-package web-mode
+  :ensure t)
+
+;; ruby-mode
+(use-package ruby-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\Vagrantfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+  )
+
+;; json-mode
+(use-package json-mode
+  :ensure t)
+
+;; php-mode
+(use-package php-mode
+  :ensure t)
+
+;; yaml-mode
+(use-package yaml-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+  )
+
+;; glsl-mode
+(use-package glsl-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode))
+  )
+
+;; companyのglsl拡張
+(use-package company-glsl
+  :ensure t
+  )
+
+;; terraform0mode
+(use-package terraform-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tf$" . terraform-mode))
+  )
+
+;; dockerfile-mode
+(use-package dockerfile-mode
+  :ensure t)
+
+;; nginx-mode
+(use-package nginx-mode
+  :ensure t)
+
+;; groovy-mode
 (use-package groovy-mode
   :ensure t
   :config
@@ -550,11 +660,13 @@
 
   )
 
+;; git操作
 (use-package magit
   :ensure t
   :bind* ("C-x m" . magit-status)
   )
 
+;; 空白を可視化
 (use-package whitespace
   :config
   ;; 空白を表示
@@ -585,17 +697,18 @@
   :init (global-whitespace-mode t)
   )
 
-                                        ; PATHをシェルから引き継ぐ
+;; PATHをシェルから引き継ぐ
 (use-package exec-path-from-shell
   :ensure t
   :init (exec-path-from-shell-initialize)
   )
 
-                                        ; フォースを信じろ
+;; companyのjedi拡張
 (use-package company-jedi
   :ensure t
   )
 
+;; フォースを信じろ
 (use-package jedi
   :ensure t
   :config
@@ -605,21 +718,23 @@
   (add-hook 'python-mode-hook 'jedi:setup)
   )
 
+;; それっぽい定義にジャンプしてくれる
 (use-package dumb-jump
   :config
-                                        ;(setq dumb-jump-selector 'ivy)
+  ;;(setq dumb-jump-selector 'ivy)
   (setq dumb-jump-selector 'helm)
   (bind-key "C-x d" 'dumb-jump-go)
   :ensure t
   )
 
-                                        ; インクリメンタルサーチ
+;; インクリメンタルバッファサーチ
 (use-package swiper
   :ensure t
   :config
   (bind-key* "C-s" 'swiper)
   )
 
+;; plantuml-mode
 (use-package plantuml-mode
   :ensure t
   :config
@@ -630,21 +745,24 @@
   (setq plantuml-options "-charset UTF-8")
   )
 
+;; 分割ウインドウをいい感じの比率で制御してくれる
+;;(use-package golden-ratio
+;;  :ensure t
+;;  :init (golden-ratio-mode t)
+;;  :config
+;;  (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
+;;  )
 
-                                        ;(use-package golden-ratio
-                                        ;  :ensure t
-                                        ;  :init (golden-ratio-mode t)
-                                        ;  :config
-                                        ;  (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
-                                        ;  )
+;; 起動画面
+;;(use-package dashboard
+;;  :ensure t
+;;  :config
+;;  (dashboard-setup-startup-hook)
+;;  )
 
-                                        ;(use-package dashboard
-                                        ;  :ensure t
-                                        ;  :config
-                                        ;  (dashboard-setup-startup-hook)
-                                        ;  )
-
-;;   ###  キーバインド設定 ###
+;;
+;;  setting for key bind
+;;
 
 ;; ウインドウ分割
 (bind-key* "M-d" 'split-window-vertically)
@@ -659,76 +777,34 @@
 
 (bind-key* "C-x p" 'previous-buffer)
 
+(bind-key* "C-x SPC" 'rectangle-mark-mode)
+
 ;; 置換コマンド
 (bind-key* "C-r" 'vr/replace)
 
-;; 画面のが最大化されている or NOTの状態を保持
-(defvar is-window-maximized nil)
-
-;; 1. 最大化されている場合
-;;  -> `balance-windows` で画面のバランスを調整
-;; 2. 最大化されていない場合
-;;  -> `maximize-window` で画面を最大化
-
-(defun window-toggle-max ()
-  (interactive) ;; 補足あり
-  (progn
-    (if is-window-maximized
-        (balance-windows)
-      (maximize-window))
-    (setq is-window-maximized (not is-window-maximized))))
-
-(bind-key* "C-x m" 'window-toggle-max)
-
 ;; スキップ移動
-(bind-key* "M-<down>" (kbd "C-u 5 <down>"))
-(bind-key* "M-<up>" (kbd "C-u 5 <up>"))
+(bind-key* "M-<down>" 'forward-paragraph)
+(bind-key* "M-<up>" 'backward-paragraph)
 (bind-key* "M-<right>" 'forward-word)
 (bind-key* "M-<left>" 'backward-word)
 ;; たーみなる
-(bind-key* "ESC <down>" (kbd "C-u 5 <down>"))
-(bind-key* "ESC <up>" (kbd "C-u 5 <up>"))
-
-
+(bind-key* "ESC <down>" 'forward-paragraph)
+(bind-key* "ESC <up>" 'backward-paragraph)
 
 ;; コピー
 (bind-key* "C-q" 'copy-region-as-kill)
 
 (bind-key* "C-x C-b" 'buffer-menu)
-                                        ;(bind-key* "C-b" 'list-buffers)
 
 ;; eww
 (bind-key* "C-x w" 'eww)
 
-;; ewwを複数起動
-(defun eww-mode-hook--rename-buffer ()
-  "Rename eww browser's buffer so sites open in new page."
-  (rename-buffer "eww" t))
-(add-hook 'eww-mode-hook 'eww-mode-hook--rename-buffer)
-
-;; ewwの背景色をなんとかする
-(defvar eww-disable-colorize t)
-(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
-  (unless eww-disable-colorize
-    (funcall orig start end fg)))
-(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
-(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
-(defun eww-disable-color ()
-  "eww で文字色を反映させない"
-  (interactive)
-  (setq-local eww-disable-colorize nil)
-  (eww-reload))
-(defun eww-enable-color ()
-  "eww で文字色を反映させる"
-  (interactive)
-  (setq-local eww-disable-colorize t)
-  (eww-reload))
-
 ;; window resize
 (bind-key* "C-x r" 'window-resizer)
 
-
-;;   ###  ファイルホック ###
+;;
+;; ファイルホック
+;;
 
 ;; sql-mode
 (add-to-list 'auto-mode-alist '("\\.sql?$"     . sql-mode))
@@ -736,40 +812,5 @@
 ;; web-mode
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
-
-;;   ### diffを見やすく ###
-;; コントロール用のバッファを同一フレーム内に表示
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-;; diffのバッファを上下ではなく左右に並べる
-(setq ediff-split-window-function 'split-window-horizontally)
-
-;; ### CHEAT COMMAND ###
-(defvar cheat-root "~/.order66/cheat/")
-
-(defun cheat()
-  (interactive)
-  (view-file (concat cheat-root "cheat.md"))
-  )
-
-(defun cheat-tmux()
-  (interactive)
-  (view-file (concat cheat-root "cheat-tmux.md"))
-  )
-
-(defun cheat-mysql()
-  (interactive)
-  (view-file (concat cheat-root "cheat-mysql.md"))
-  )
-
-(defun cheat-go()
-  (interactive)
-  (view-file (concat cheat-root "cheat-go.md"))
-  )
-
-(defun cheat-rsync()
-  (interactive)
-  (view-file (concat cheat-root "cheat-rsync.md"))
-  )
-
 
 
