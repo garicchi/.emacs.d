@@ -85,7 +85,7 @@
 (setq-default truncate-partial-width-windows nil)
 
 (add-hook 'term-mode-hook
-      (lambda () (setq truncate-lines t)))
+          (lambda () (setq truncate-lines t)))
 
 ;; バッファが外部から変更されたときに自動で再読込
 (global-auto-revert-mode 1)
@@ -209,6 +209,14 @@
   (global-undo-tree-mode)
   )
 
+(use-package multiple-cursors
+  :ensure t
+  )
+
+(use-package visual-regexp
+  :ensure t
+  )
+
 (use-package smooth-scroll
   :ensure t
   :config
@@ -219,58 +227,84 @@
 (use-package powerline
   :ensure t
   :config
+  (defun shorten-directory (dir max-length)
+    "Show up to `max-length' characters of a directory name `dir'."
+    (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
+          (output ""))
+      (when (and path (equal "" (car path)))
+        (setq path (cdr path)))
+      (while (and path (< (length output) (- max-length 4)))
+        (setq output (concat (car path) "/" output))
+        (setq path (cdr path)))
+      (when path
+        (setq output (concat ".../" output)))
+      output))
+  
   (defun powerline-my-theme ()
     "Setup the my mode-line."
     (interactive)
-    (setq powerline-current-separator 'utf-8)
     (setq-default mode-line-format
                   '("%e"
                     (:eval
                      (let* ((active (powerline-selected-window-active))
                             (mode-line (if active 'mode-line 'mode-line-inactive))
-                            (face1 (if active 'mode-line-1-fg 'mode-line-2-fg))
-                            (face2 (if active 'mode-line-1-arrow 'mode-line-2-arrow))
+                            (face1 (if active 'powerline-active1 'powerline-inactive1))
+                            (face2 (if active 'powerline-active2 'powerline-inactive2))
                             (separator-left (intern (format "powerline-%s-%s"
-                                                            (powerline-current-separator)
+                                                            powerline-default-separator
                                                             (car powerline-default-separator-dir))))
-                            (lhs (list (powerline-raw " " face1)
-                                       (powerline-major-mode face1)
+                            (separator-right (intern (format "powerline-%s-%s"
+                                                             powerline-default-separator
+                                                             (cdr powerline-default-separator-dir))))
+                            (lhs (list (powerline-raw "%*" nil 'l)
+                                       (powerline-buffer-size nil 'l)
+                                       (powerline-raw mode-line-mule-info nil 'l)
+                                       (powerline-raw
+                                        (shorten-directory default-directory 15)
+                                        nil 'l)
+                                       (powerline-buffer-id nil 'r)
+                                       (when (and (boundp 'which-func-mode) which-func-mode)
+                                         (powerline-raw which-func-format nil 'l))
+                                       (powerline-raw " ")
+                                       (funcall separator-left mode-line face1)
+                                       (when (boundp 'erc-modified-channels-object)
+                                         (powerline-raw erc-modified-channels-object face1 'l))
+                                       (powerline-vc face1 'r)
+                                       (powerline-major-mode face1 'l)
+                                       (powerline-process face1)
+                                       ;(powerline-minor-modes face1 'l)
+                                       (powerline-narrow face1 'l)
                                        (powerline-raw " " face1)
                                        (funcall separator-left face1 face2)
-                                       (powerline-buffer-id nil )
-                                       (powerline-raw " [ ")
-                                       (powerline-raw mode-line-mule-info nil)
-                                       (powerline-raw "%*")
-                                       (powerline-raw " |")
-                                       (powerline-process nil)
-                                       (powerline-vc)
-                                       (powerline-raw " ]")
                                        ))
-                            (rhs (list (powerline-raw "%4l")
-                                       (powerline-raw ":")
-                                       (powerline-raw "%2c")
-                                       (powerline-raw " | ")                                  
-                                       (powerline-raw "%6p")
+                            (rhs (list (powerline-raw global-mode-string face2 'r)
+                                       (funcall separator-right face2 face1)
+                                       (powerline-raw "%4l" face1 'l)
+                                       (powerline-raw ":" face1 'l)
+                                       (powerline-raw "%3c" face1 'r)
+                                       (funcall separator-right face1 mode-line)
                                        (powerline-raw " ")
-                                       )))
+                                       (powerline-raw "%6p" nil 'r)
+                                       (powerline-hud face2 face1))))
                        (concat (powerline-render lhs)
-                               (powerline-fill nil (powerline-width rhs)) 
+                               (powerline-fill face2 (powerline-width rhs))
                                (powerline-render rhs)))))))
   (powerline-my-theme)
   
 
-(defun make/set-face (face-name fg-color bg-color weight)
-  (make-face face-name)
-  (set-face-attribute face-name nil
-                      :foreground fg-color :background bg-color :box nil :weight weight))
-;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
-;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
-;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
-;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
+                                        ;(defun make/set-face (face-name fg-color bg-color weight)
+                                        ;  (make-face face-name)
+                                        ;  (set-face-attribute face-name nil
+                                        ;                      :foreground fg-color :background bg-color :box nil :weight weight))
+                                        ;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
+                                        ;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+                                        ;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
+                                        ;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
 
   )
 (use-package popup
   :ensure t)
+
 (use-package neotree
   :ensure t
   :config
@@ -296,28 +330,32 @@
   (setq multi-term-program shell-file-name)
   (bind-key "C-x t" 'multi-term)
   )
-;(use-package monokai-theme
-;  :ensure t
-;  :config
-;  (load-theme 'monokai t)
-;  )
-;(use-package darcula-theme
-;  :ensure t
-;  :init (load-theme 'darcula t)
-;  )
-;(use-package color-theme-sanityinc-tomorrow
-;  :ensure t
-;  :init (load-theme 'sanityinc-tomorrow-eighties)
+                                        ;(use-package monokai-theme
+                                        ;  :ensure t
+                                        ;  :config
+                                        ;  (load-theme 'monokai t)
+                                        ;  )
+                                        ;(use-package darcula-theme
+                                        ;  :ensure t
+                                        ;  :init (load-theme 'darcula t)
+                                        ;  )
+                                        ;(use-package color-theme-sanityinc-tomorrow
+                                        ;  :ensure t
+                                        ;  :init (load-theme 'sanityinc-tomorrow-eighties)
                                         ;)
-;(use-package nord-theme
-;  :ensure t
-;  :init (load-theme 'nord t)
+                                        ;(use-package nord-theme
+                                        ;  :ensure t
+                                        ;  :init (load-theme 'nord t)
                                         ;  )
 
 (use-package spacemacs-theme
   :defer t
   :init (load-theme 'spacemacs-dark t)
   )
+                                        ;(use-package zenburn-theme
+                                        ;  :ensure t
+                                        ;  :init (load-theme 'zenburn t)
+                                        ;  )
 
 (use-package tabbar
   :ensure t
@@ -348,7 +386,7 @@
                        ((char-equal ?* (aref (buffer-name b) 0)) nil) ; それ以外の * で始まるバッファは表示しない
                        ((buffer-live-p b) b)))
                   (buffer-list))))
-  ;(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
+                                        ;(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
   :init (tabbar-mode 0)
   )
 
@@ -368,6 +406,8 @@
   (eval-after-load 'flycheck
     '(custom-set-variables
       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+  (add-hook 'text-mode-hook 'flyspell-mode)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
 (use-package company
   :ensure t
@@ -382,6 +422,14 @@
   )
 (use-package smooth-scroll
   :ensure t)
+
+(use-package expand-region
+  :ensure t
+  :bind* ("C-S-SPC" . er/expand-region)
+  )
+
+(bind-key* "C-@" 'set-mark-command)
+
 (use-package anzu
   :ensure t
   :init (global-anzu-mode +1)
@@ -430,7 +478,7 @@
                                  )))
   (setq helm-buffers-fuzzy-matching t
         helm-recentf-fuzzy-match t
-   )
+        )
   (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
   (bind-key* "M-x" 'helm-M-x)
   (bind-key* "C-x x" 'helm-M-x)
@@ -507,11 +555,6 @@
   :bind* ("C-x m" . magit-status)
   )
 
-(use-package git-gutter+
-  :ensure t
-  :init (global-git-gutter+-mode)
-  )
-
 (use-package whitespace
   :config
   ;; 空白を表示
@@ -525,15 +568,15 @@
                            ))
   (defvar my/bg-color "#232323")
   (set-face-attribute 'whitespace-trailing nil
-                      ;:background my/bg-color
+                                        ;:background my/bg-color
                       :foreground "DeepPink"
                       :underline t)
   (set-face-attribute 'whitespace-tab nil
-                      ;:background my/bg-color
+                                        ;:background my/bg-color
                       :foreground "#4c566a"
                       :underline nil)
   (set-face-attribute 'whitespace-space nil
-                      ;:background my/bg-color
+                                        ;:background my/bg-color
                       :foreground "GreenYellow"
                       :weight 'bold)
   (set-face-attribute 'whitespace-empty nil
@@ -542,13 +585,13 @@
   :init (global-whitespace-mode t)
   )
 
-; PATHをシェルから引き継ぐ
+                                        ; PATHをシェルから引き継ぐ
 (use-package exec-path-from-shell
   :ensure t
   :init (exec-path-from-shell-initialize)
   )
 
-; フォースを信じろ
+                                        ; フォースを信じろ
 (use-package company-jedi
   :ensure t
   )
@@ -564,12 +607,13 @@
 
 (use-package dumb-jump
   :config
-  ;(setq dumb-jump-selector 'ivy)
+                                        ;(setq dumb-jump-selector 'ivy)
   (setq dumb-jump-selector 'helm)
   (bind-key "C-x d" 'dumb-jump-go)
   :ensure t
   )
 
+                                        ; インクリメンタルサーチ
 (use-package swiper
   :ensure t
   :config
@@ -587,18 +631,18 @@
   )
 
 
-;(use-package golden-ratio
-;  :ensure t
-;  :init (golden-ratio-mode t)
-;  :config
-;  (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
-;  )
+                                        ;(use-package golden-ratio
+                                        ;  :ensure t
+                                        ;  :init (golden-ratio-mode t)
+                                        ;  :config
+                                        ;  (add-to-list 'golden-ratio-exclude-buffer-names " *NeoTree*")
+                                        ;  )
 
-;(use-package dashboard
-;  :ensure t
-;  :config
-;  (dashboard-setup-startup-hook)
-;  )
+                                        ;(use-package dashboard
+                                        ;  :ensure t
+                                        ;  :config
+                                        ;  (dashboard-setup-startup-hook)
+                                        ;  )
 
 ;;   ###  キーバインド設定 ###
 
@@ -613,10 +657,10 @@
 (bind-key* "C-x p" 'windmove-up)
 (bind-key* "C-x ;" 'windmove-down)
 
-(bind-key* "C-i" 'kill-buffer)
-
 (bind-key* "C-x p" 'previous-buffer)
 
+;; 置換コマンド
+(bind-key* "C-r" 'vr/replace)
 
 ;; 画面のが最大化されている or NOTの状態を保持
 (defvar is-window-maximized nil)
@@ -630,9 +674,9 @@
   (interactive) ;; 補足あり
   (progn
     (if is-window-maximized
-      (balance-windows)
-    (maximize-window))
-  (setq is-window-maximized (not is-window-maximized))))
+        (balance-windows)
+      (maximize-window))
+    (setq is-window-maximized (not is-window-maximized))))
 
 (bind-key* "C-x m" 'window-toggle-max)
 
@@ -651,7 +695,7 @@
 (bind-key* "C-q" 'copy-region-as-kill)
 
 (bind-key* "C-x C-b" 'buffer-menu)
-;(bind-key* "C-b" 'list-buffers)
+                                        ;(bind-key* "C-b" 'list-buffers)
 
 ;; eww
 (bind-key* "C-x w" 'eww)
