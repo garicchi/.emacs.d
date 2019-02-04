@@ -64,6 +64,17 @@
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
 
+;; recentfの履歴を10000にする
+(setq recentf-max-saved-items 1000)
+
+;;
+(setq recentf-exclude '(".recentf"))
+
+(setq recentf-auto-cleanup 10)
+(setq recentf-auto-save-timer
+      (run-with-idle-timer 30 t 'recentf-save-list)
+      )
+
 ;; 行番号を表示する
 (global-linum-mode t)
 
@@ -574,13 +585,14 @@
 (use-package helm-git-grep
   :ensure t
   :config
-  (global-set-key (kbd "C-x s") 'helm-git-grep)
-  (global-set-key (kbd "C-x g") 'helm-browse-project)
+  :bind* ("C-x g" . helm-browse-project)
+  :bind* ("C-x s" . helm-git-grep)
   )
 
 ;; helmでgit ls
 (use-package helm-ls-git
-  :ensure t)
+  :ensure t
+  )
 
 ;; flycheckでポップアップウインドウを出してくれる
 (use-package flycheck-pos-tip
@@ -783,13 +795,16 @@
 (bind-key* "C-r" 'vr/replace)
 
 ;; スキップ移動
-(bind-key* "M-<down>" 'forward-paragraph)
-(bind-key* "M-<up>" 'backward-paragraph)
+(bind-key* "M-<down>" (kbd "C-u 5 <down>"))
+(bind-key* "M-<up>" (kbd "C-u 5 <up>"))
 (bind-key* "M-<right>" 'forward-word)
 (bind-key* "M-<left>" 'backward-word)
 ;; たーみなる
-(bind-key* "ESC <down>" 'forward-paragraph)
-(bind-key* "ESC <up>" 'backward-paragraph)
+(bind-key* "ESC <down>" (kbd "C-u 5 <down>"))
+(bind-key* "ESC <up>" (kbd "C-u 5 <up>"))
+
+;; C-backspaceで単語削除
+(bind-key* "C-backspace" 'backward-kill-word)
 
 ;; コピー
 (bind-key* "C-q" 'copy-region-as-kill)
@@ -813,4 +828,10 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
 
+(defun pr-show ()
+  "Open PullRequest"
+  (interactive)
+  (shell-command (concat "source ~/.order66/env.sh&&pr " (buffer-file-name) " " (number-to-string (line-number-at-pos))))
+  )
 
+(bind-key* "C-x p" 'pr-show)
