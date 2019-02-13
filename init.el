@@ -64,6 +64,9 @@
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
 
+;; scroll-barを消す
+(scroll-bar-mode -1)
+
 ;; recentfの履歴を10000にする
 (setq recentf-max-saved-items 1000)
 
@@ -140,6 +143,9 @@
 ;; エラー音をならなくする
 (setq ring-bell-function 'ignore)
 
+;;; モードラインに時間を表示する
+(display-time)
+
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
 
@@ -166,7 +172,6 @@
   (interactive)
   (setq-local eww-disable-colorize t)
   (eww-reload))
-
 
 ;; window-resizerコマンド - ウインドウをリサイズできるようにする
 (defun window-resizer ()
@@ -305,7 +310,7 @@
   (defun powerline-my-theme ()
     "Setup the my mode-line."
     (interactive)
-    (setq-default mode-line-format
+    (setq-default header-line-format
                   '("%e"
                     (:eval
                      (let* ((active (powerline-selected-window-active))
@@ -319,8 +324,8 @@
                                                              powerline-default-separator
                                                              (cdr powerline-default-separator-dir))))
                             (lhs (list (powerline-raw "%*" nil 'l)
-                                       (powerline-buffer-size nil 'l)
-                                       (powerline-raw mode-line-mule-info nil 'l)
+;;                                       (powerline-buffer-size nil 'l)
+;;                                       (powerline-raw mode-line-mule-info nil 'l)
                                        (powerline-raw
                                         (shorten-directory default-directory 15)
                                         nil 'l)
@@ -352,7 +357,7 @@
                                (powerline-fill face2 (powerline-width rhs))
                                (powerline-render rhs)))))))
   (powerline-my-theme)
-  
+  (setq-default mode-line-format nil)
   ;; powerlineの色を変えたい時はここ
   ;;(defun make/set-face (face-name fg-color bg-color weight)
   ;;  (make-face face-name)
@@ -553,6 +558,7 @@
                                  helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
+                                 helm-source-ls-git
                                  )))
   ;; 曖昧マッチ
   (setq helm-buffers-fuzzy-matching t
@@ -600,7 +606,15 @@
 
 ;; companyのgo拡張
 (use-package company-go
-  :ensure t)
+  :ensure t
+  :config
+  (setq company-idle-delay .3)
+  (setq company-echo-delay 0)
+  (setq company-begin-commands '(self-insert-command))
+  (add-hook 'go-mode-hook (lambda ()
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)))
+  )
 
 ;; go-mode
 (use-package go-mode
@@ -804,7 +818,7 @@
 (bind-key* "ESC <up>" (kbd "C-u 5 <up>"))
 
 ;; C-backspaceで単語削除
-(bind-key* "C-backspace" 'backward-kill-word)
+(bind-key* "C-<backspace>" 'backward-kill-word)
 
 ;; コピー
 (bind-key* "C-q" 'copy-region-as-kill)
@@ -835,3 +849,15 @@
   )
 
 (bind-key* "C-x p" 'pr-show)
+
+(defun run-mode ()
+  "chdmo u+x"
+  (interactive)
+  (shell-command (concat "chmod u+x " (buffer-file-name)))
+  )
+
+(defun commit-push ()
+  "git commit git push"
+  (interactive)
+  (shell-command "git commit -a -m \"fix:\"&&git push")
+  )
