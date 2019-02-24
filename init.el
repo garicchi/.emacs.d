@@ -214,6 +214,23 @@
       (maximize-window))
     (setq is-window-maximized (not is-window-maximized))))
 
+;; rename機能
+;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
+
 ;; scratchの初期メッセージ消去
 (setq initial-scratch-message "")
 
@@ -230,6 +247,12 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 ;; diffのバッファを上下ではなく左右に並べる
 (setq ediff-split-window-function 'split-window-horizontally)
+
+(defun config-sh-mode ()
+  (setq indent-tabs-mode nil 
+        c-basic-offset 4) 
+)
+(add-hook 'sh-mode-hook 'config-sh-mode)
 
 ;;
 ;; package setting
@@ -604,6 +627,18 @@
 (use-package flycheck-pos-tip
   :ensure t)
 
+;; git diffを表示するやつ
+(use-package git-gutter+
+  :ensure t
+  :config
+  :init
+  (global-git-gutter+-mode)
+  )
+
+(use-package git-gutter-fringe+
+  :ensure t
+  )
+
 ;; companyのgo拡張
 (use-package company-go
   :ensure t
@@ -686,6 +721,13 @@
 
   )
 
+;; prolog
+(use-package prolog
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+  )
+
 ;; git操作
 (use-package magit
   :ensure t
@@ -752,6 +794,7 @@
   (bind-key "C-x d" 'dumb-jump-go)
   :ensure t
   )
+
 
 ;; インクリメンタルバッファサーチ
 (use-package swiper
@@ -824,6 +867,9 @@
 (bind-key* "C-q" 'copy-region-as-kill)
 
 (bind-key* "C-x C-b" 'buffer-menu)
+
+;; 1行削除
+(bind-key* "C-x d" 'kill-line)
 
 ;; eww
 (bind-key* "C-x w" 'eww)
