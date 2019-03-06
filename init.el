@@ -254,6 +254,7 @@
 )
 (add-hook 'sh-mode-hook 'config-sh-mode)
 
+(set-face-background 'default "#333333")
 ;;
 ;; package setting
 ;; http://emacs-jp.github.io/packages/package-management/package-el.html
@@ -314,93 +315,112 @@
   )
 
 ;; モードラインがきれいになる
-(use-package powerline
+;;(use-package powerline
+;;  :ensure t
+;;  :config
+;;  (defun shorten-directory (dir max-length)
+;;    "Show up to `max-length' characters of a directory name `dir'."
+;;    (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
+;;          (output ""))
+;;      (when (and path (equal "" (car path)))
+;;        (setq path (cdr path)))
+;;      (while (and path (< (length output) (- max-length 4)))
+;;        (setq output (concat (car path) "/" output))
+;;        (setq path (cdr path)))
+;;      (when path
+;;        (setq output (concat ".../" output)))
+;;      output))
+;;  
+;;  (defun powerline-my-theme ()
+;;    "Setup the my mode-line."
+;;    (interactive)
+;;    (setq-default header-line-format
+;;                  '("%e"
+;;                    (:eval
+;;                     (let* ((active (powerline-selected-window-active))
+;;                            (mode-line (if active 'mode-line 'mode-line-inactive))
+;;                            (face1 (if active 'powerline-active1 'powerline-inactive1))
+;;                            (face2 (if active 'powerline-active2 'powerline-inactive2))
+;;                            (separator-left (intern (format "powerline-%s-%s"
+;;                                                            powerline-default-separator
+;;                                                            (car powerline-default-separator-dir))))
+;;                            (separator-right (intern (format "powerline-%s-%s"
+;;                                                             powerline-default-separator
+;;                                                             (cdr powerline-default-separator-dir))))
+;;                            (lhs (list (powerline-raw "%*" nil 'l)
+;;;;                                       (powerline-buffer-size nil 'l)
+;;;;                                       (powerline-raw mode-line-mule-info nil 'l)
+;;                                       (powerline-raw
+;;                                        (shorten-directory default-directory 15)
+;;                                        nil 'l)
+;;                                       (powerline-buffer-id nil 'r)
+;;                                       (when (and (boundp 'which-func-mode) which-func-mode)
+;;                                         (powerline-raw which-func-format nil 'l))
+;;                                       (powerline-raw " ")
+;;                                       (funcall separator-left mode-line face1)
+;;                                       (when (boundp 'erc-modified-channels-object)
+;;                                         (powerline-raw erc-modified-channels-object face1 'l))
+;;                                       (powerline-vc face1 'r)
+;;                                       (powerline-major-mode face1 'l)
+;;                                       (powerline-process face1)
+;;                                        ;(powerline-minor-modes face1 'l)
+;;                                       (powerline-narrow face1 'l)
+;;                                       (powerline-raw " " face1)
+;;                                       (funcall separator-left face1 face2)
+;;                                       ))
+;;                            (rhs (list (powerline-raw global-mode-string face2 'r)
+;;                                       (funcall separator-right face2 face1)
+;;                                       (powerline-raw "%4l" face1 'l)
+;;                                       (powerline-raw ":" face1 'l)
+;;                                       (powerline-raw "%3c" face1 'r)
+;;                                       (funcall separator-right face1 mode-line)
+;;                                       (powerline-raw " ")
+;;                                       (powerline-raw "%6p" nil 'r)
+;;                                       (powerline-hud face2 face1))))
+;;                       (concat (powerline-render lhs)
+;;                               (powerline-fill face2 (powerline-width rhs))
+;;                               (powerline-render rhs)))))))
+;;  (powerline-my-theme)
+;;  (setq-default mode-line-format nil)
+;;  ;; powerlineの色を変えたい時はここ
+;;  ;;(defun make/set-face (face-name fg-color bg-color weight)
+;;  ;;  (make-face face-name)
+;;  ;;  (set-face-attribute face-name nil
+;;  ;;                      :foreground fg-color :background bg-color :box nil :weight weight))
+;;  ;;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
+;;  ;;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+;;  ;;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
+;;  ;;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
+;;  )
+
+;; doomなモードライン
+(use-package doom-modeline
   :ensure t
-  :config
-  (defun shorten-directory (dir max-length)
-    "Show up to `max-length' characters of a directory name `dir'."
-    (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
-          (output ""))
-      (when (and path (equal "" (car path)))
-        (setq path (cdr path)))
-      (while (and path (< (length output) (- max-length 4)))
-        (setq output (concat (car path) "/" output))
-        (setq path (cdr path)))
-      (when path
-        (setq output (concat ".../" output)))
-      output))
-  
-  (defun powerline-my-theme ()
-    "Setup the my mode-line."
-    (interactive)
-    (setq-default header-line-format
-                  '("%e"
-                    (:eval
-                     (let* ((active (powerline-selected-window-active))
-                            (mode-line (if active 'mode-line 'mode-line-inactive))
-                            (face1 (if active 'powerline-active1 'powerline-inactive1))
-                            (face2 (if active 'powerline-active2 'powerline-inactive2))
-                            (separator-left (intern (format "powerline-%s-%s"
-                                                            powerline-default-separator
-                                                            (car powerline-default-separator-dir))))
-                            (separator-right (intern (format "powerline-%s-%s"
-                                                             powerline-default-separator
-                                                             (cdr powerline-default-separator-dir))))
-                            (lhs (list (powerline-raw "%*" nil 'l)
-;;                                       (powerline-buffer-size nil 'l)
-;;                                       (powerline-raw mode-line-mule-info nil 'l)
-                                       (powerline-raw
-                                        (shorten-directory default-directory 15)
-                                        nil 'l)
-                                       (powerline-buffer-id nil 'r)
-                                       (when (and (boundp 'which-func-mode) which-func-mode)
-                                         (powerline-raw which-func-format nil 'l))
-                                       (powerline-raw " ")
-                                       (funcall separator-left mode-line face1)
-                                       (when (boundp 'erc-modified-channels-object)
-                                         (powerline-raw erc-modified-channels-object face1 'l))
-                                       (powerline-vc face1 'r)
-                                       (powerline-major-mode face1 'l)
-                                       (powerline-process face1)
-                                        ;(powerline-minor-modes face1 'l)
-                                       (powerline-narrow face1 'l)
-                                       (powerline-raw " " face1)
-                                       (funcall separator-left face1 face2)
-                                       ))
-                            (rhs (list (powerline-raw global-mode-string face2 'r)
-                                       (funcall separator-right face2 face1)
-                                       (powerline-raw "%4l" face1 'l)
-                                       (powerline-raw ":" face1 'l)
-                                       (powerline-raw "%3c" face1 'r)
-                                       (funcall separator-right face1 mode-line)
-                                       (powerline-raw " ")
-                                       (powerline-raw "%6p" nil 'r)
-                                       (powerline-hud face2 face1))))
-                       (concat (powerline-render lhs)
-                               (powerline-fill face2 (powerline-width rhs))
-                               (powerline-render rhs)))))))
-  (powerline-my-theme)
-  (setq-default mode-line-format nil)
-  ;; powerlineの色を変えたい時はここ
-  ;;(defun make/set-face (face-name fg-color bg-color weight)
-  ;;  (make-face face-name)
-  ;;  (set-face-attribute face-name nil
-  ;;                      :foreground fg-color :background bg-color :box nil :weight weight))
-  ;;(make/set-face 'mode-line-1-fg "#282C34" "#9b7cb6" 'bold)
-  ;;(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
-  ;;(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#9b7cb6" 'bold)
-  ;;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
-  )
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-minor-modes nil)
+  :hook (after-init . doom-modeline-mode)
+      )
 
 ;; flycheckとかでポップアップしてくれる
 (use-package popup
   :ensure t)
 
+;; 非アクティブウインドウが暗くなる
+;;(use-package dimmer
+;;  :ensure t
+;;  :init (dimmer-mode)
+;;  )
+
+
 ;; 左側にでるファイラー
 (use-package neotree
   :ensure t
+  :custom
+    (neo-theme 'nerd2)
   :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+;;  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
   (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
   
@@ -411,7 +431,7 @@
   (bind-key "C-c s" 'neotree-stretch-toggle neotree-mode-map)
   (bind-key "C-c t" 'neotree-toggle neotree-mode-map)
   (bind-key "C-c n" 'neotree-create-node neotree-mode-map)
-  (bind-key* "C-n" 'neotree-refresh) ;バッファで開いているところをneoteeのルートにする
+  (bind-key* "C-x n" 'neotree-refresh) ;バッファで開いているところをneoteeのルートにする
   
   (neotree)
   )
@@ -424,15 +444,41 @@
   (bind-key "C-x t" 'multi-term)
   )
 
+(use-package imenu-list
+  :ensure t
+  )
+
+
 ;;
 ;; color theme
 ;;
 
 ;; spacemacsのテーマ。とてもよい
-(use-package spacemacs-theme
-  :defer t
-  :init (load-theme 'spacemacs-dark t)
+;;(use-package spacemacs-theme
+;;  :defer t
+;;  :init (load-theme 'spacemacs-dark t)
+;;  )
+
+(use-package doom-themes
+  :ensure t
+  :init (load-theme 'doom-one t)
+  :custom
+  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
   )
+
 
 ;;(use-package monokai-theme
 ;;  :ensure t
@@ -455,6 +501,11 @@
 ;;  :ensure t
 ;;  :init (load-theme 'zenburn t)
 ;;  )
+
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  )
 
 ;; バッファをタブみたいに表示してくれるやつ
 (use-package tabbar
@@ -522,6 +573,11 @@
   (add-to-list 'company-backends 'company-edbi)
   (global-set-key (kbd "C-<tab>") 'company-complete)
   )
+
+;; companyにアイコンとか表示してくれるっぽい
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
 ;; コードブロックごとにregionを作れる
 (use-package expand-region
@@ -834,10 +890,8 @@
 ;;
 
 ;; ウインドウ分割
-(bind-key* "M-d" 'split-window-vertically)
 (bind-key* "C-d" 'other-window)
 (bind-key* "C-f" 'other-window)
-(bind-key* "C-<tab>" 'other-window)
 
 (bind-key* "C-x l" 'windmove-left)
 (bind-key* "C-x :" 'windmove-right)
