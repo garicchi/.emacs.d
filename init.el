@@ -941,9 +941,6 @@
 
 (bind-key* "C-x C-b" 'buffer-menu)
 
-;; 1行削除
-(bind-key* "C-x d" 'kill-line)
-
 ;; eww
 (bind-key* "C-x w" 'eww)
 
