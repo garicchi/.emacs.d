@@ -285,6 +285,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
 
@@ -321,6 +322,31 @@
   :ensure t
   :bind* ("C-c C-m" . mc/mark-all-like-this)
   )
+
+(use-package nyan-mode
+  :ensure t
+  :init
+  (nyan-mode)
+  (nyan-start-animation)
+  )
+
+(use-package wttrin
+  :ensure t
+  :config
+  (setq wttrin-default-cities '("Tokyo"))
+  (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
+  )
+
+(use-package fireplace
+  :ensure t
+  :config
+  )
+
+(use-package selectric-mode
+  :ensure t
+  :config
+  )
+
 
 ;; 正規表現検索をビジュアル的に
 (use-package visual-regexp
