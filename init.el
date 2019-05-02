@@ -113,7 +113,7 @@
       (process-send-string proc text)
       (process-send-eof proc))))
 
-(if (or darwin-p carbon-p)
+(if (or darwin-p)
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx))
 
@@ -167,6 +167,16 @@
 
 ;;; モードラインに時間を表示する
 (display-time)
+
+;; コードの折りたたみを有効にする
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+(add-hook 'groovy-mode-hook 'hs-minor-mode)
+(add-hook 'c-mode-common-hook   'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook       'hs-minor-mode)
+(add-hook 'lisp-mode-hook       'hs-minor-mode)
+(add-hook 'python-mode-hook       'hs-minor-mode)
+(add-hook 'sh-mode-hook         'hs-minor-mode)
 
 ;; eww
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
@@ -468,6 +478,8 @@
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
   (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
+  (setq neo-vc-integration '(face char))
+  (setq neo-toggle-window-keep-p t)
   
   (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
   (bind-key "C-c d" 'neotree-delete-node neotree-mode-map)
@@ -499,30 +511,31 @@
 ;;
 
 ;; spacemacsのテーマ。とてもよい
-;;(use-package spacemacs-theme
-;;  :defer t
-;;  :init (load-theme 'spacemacs-dark t)
-;;  )
-
-(use-package doom-themes
-  :ensure t
-  :init (load-theme 'doom-one t)
-  :custom
-  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
-  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  :config
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (doom-themes-treemacs-config)
-  
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-dark t)
   )
+
+;;(use-package doom-themes
+;;  :ensure t
+;;  :init (load-theme 'doom-opera
+;;                    t)
+;;  :custom
+;;  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
+;;  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;
+;;  :config
+;;  ;; Enable flashing mode-line on errors
+;;  (doom-themes-visual-bell-config)
+;;  
+;;  ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;  (doom-themes-neotree-config)
+;;  ;; or for treemacs users
+;;  (doom-themes-treemacs-config)
+;;  
+;;  ;; Corrects (and improves) org-mode's native fontification.
+;;  (doom-themes-org-config)
+;;  )
 
 
 ;;(use-package monokai-theme
@@ -698,6 +711,7 @@
   (bind-key* "C-x f" 'helm-find-files)
   (bind-key* "C-x b" 'helm-buffers-list)
   (bind-key* "C-x a" 'helm-do-grep-ag)
+  (bind-key* "C-x i" 'helm-imenu)
   )
 
 ;; helm-M-xでキーバインドを表示してくれる
@@ -892,7 +906,8 @@
   :config
   ;;(setq dumb-jump-selector 'ivy)
   (setq dumb-jump-selector 'helm)
-  (bind-key "C-x d" 'dumb-jump-go)
+  (bind-key* "C-x d" 'dumb-jump-go)
+  (bind-key* "C-x r" 'dumb-jump-back)
   :ensure t
   )
 
@@ -971,7 +986,7 @@
 (bind-key* "C-x w" 'eww)
 
 ;; window resize
-(bind-key* "C-x r" 'window-resizer)
+;;(bind-key* "C-x r" 'window-resizer)
 
 ;;
 ;; ファイルホック
