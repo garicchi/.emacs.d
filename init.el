@@ -706,8 +706,8 @@
   (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
   
   (bind-key* "M-x" 'helm-M-x)
-  (bind-key* "C-x x" 'helm-M-x)
-  (bind-key* "C-x RET" 'helm-mini)
+  (bind-key* "C-x x" 'helm-mini)
+  (bind-key* "C-x C-x" 'helm-mini)
   (bind-key* "C-x f" 'helm-find-files)
   (bind-key* "C-x b" 'helm-buffers-list)
   (bind-key* "C-x a" 'helm-do-grep-ag)
