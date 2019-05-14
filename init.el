@@ -41,7 +41,8 @@
 (menu-bar-mode -1)
 
 ;; ツールバー削除
-(tool-bar-mode 0)
+(if window-system
+    (tool-bar-mode 0))
 
 ;; スタートメッセージを表示させない
 (setq inhibit-startup-message t)
@@ -65,7 +66,8 @@
 (setq eol-mnemonic-unix "(LF)")
 
 ;; scroll-barを消す
-(scroll-bar-mode -1)
+(if window-system
+(scroll-bar-mode -1))
 
 ;; recentfの履歴を10000にする
 (setq recentf-max-saved-items 1000)
