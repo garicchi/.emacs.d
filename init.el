@@ -80,6 +80,9 @@
       (run-with-idle-timer 30 t 'recentf-save-list)
       )
 
+;; リージョンに上書き
+(delete-selection-mode t)
+
 ;; 行番号を表示する
 (global-linum-mode t)
 
@@ -105,19 +108,30 @@
       meadow-p   (featurep 'meadow))
 
 ; Emacs と Mac のクリップボード共有
-; from http://hakurei-shain.blogspot.com/2010/05/mac.html
-(defun copy-from-osx ()
-  (shell-command-to-string "pbpaste"))
+;; Mac Clipboard との共有
+;; https://kiririmode.hatenablog.jp/entry/20110129/p1
+(when (eq system-type 'darwin)
+  (defvar prev-yanked-text nil "*previous yanked text")
+  (setq interprogram-cut-function
+        (lambda (text &optional push)
+          (let ((process-connection-type nil))
+            (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+              (process-send-string proc text)
+              (process-send-eof proc)))
+          )
+        )
 
-(defun paste-to-osx (text &optional push)
-  (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc))))
+  (setq interprogram-paste-function
+        (lambda ()
+          (let ((text (shell-command-to-string "pbpaste")))
+            (if (string= prev-yanked-text text)
+                nil
+              (setq prev-yanked-text text)))
+          )
+        )
+  )
 
-(if (or darwin-p)
-  (setq interprogram-cut-function 'paste-to-osx)
-  (setq interprogram-paste-function 'copy-from-osx))
+
 
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
@@ -181,7 +195,7 @@
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 
 ;; eww
-(setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
+(setq eww-search-prefix "https://www.google.co.jp/search?q=")
 
 ;; ewwを複数起動
 (defun eww-mode-hook--rename-buffer ()
@@ -452,6 +466,27 @@
   ;;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
   )
 
+(setq-default
+ header-line-format
+ '(""
+   (:propertize (:eval (shorten-directory default-directory 30))
+                face mode-line-folder-face)
+   (:propertize "%b"
+                face mode-line-filename-face)))
+
+(defun shorten-directory (dir max-length)
+  "Show up to `max-length' characters of a directory name `dir'."
+  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
+        (output ""))
+    (when (and path (equal "" (car path)))
+      (setq path (cdr path)))
+    (while (and path (< (length output) (- max-length 4)))
+      (setq output (concat (car path) "/" output))
+      (setq path (cdr path)))
+    (when path
+      (setq output (concat ".../" output)))
+    output))
+
 ;; doomなモードライン
 ;;(use-package doom-modeline
 ;;  :ensure t
@@ -539,28 +574,6 @@
   (doom-themes-org-config)
   )
 
-
-;;(use-package monokai-theme
-;;  :ensure t
-;;  :config
-;;  (load-theme 'monokai t)
-;;  )
-;;(use-package darcula-theme
-;;  :ensure t
-;;  :init (load-theme 'darcula t)
-;;  )
-;;(use-package color-theme-sanityinc-tomorrow
-;;  :ensure t
-;;  :init (load-theme 'sanityinc-tomorrow-eighties)
-;;)
-;;(use-package nord-theme
-;;  :ensure t
-;;  :init (load-theme 'nord t)
-;;  )
-;;(use-package zenburn-theme
-;;  :ensure t
-;;  :init (load-theme 'zenburn t)
-;;  )
 
 (use-package which-key
   :ensure t
@@ -697,7 +710,6 @@
                                  helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
-                                 helm-source-ls-git
                                  )))
   ;; 曖昧マッチ
   (setq helm-buffers-fuzzy-matching t
@@ -1192,6 +1204,6 @@
  '(whitespace-space ((t (:background "unspecified-bg" :foreground "GreenYellow" :weight bold))))
  '(helm-candidate-number ((t (:background "unspecified-bg" :foreground "black"))))
  '(font-lock-comment-face ((t (:foreground "brightblack"))))
- '(mode-line-inactive ((t (:inherit mode-line :background "unspecif
+ '(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
  )
 

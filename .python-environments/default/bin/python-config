@@ -1,4 +1,4 @@
-#!/Users/togai-r/.emacs.d/.python-environments/default/bin/python
+#!/Users/garicchi/.emacs.d/.python-environments/default/bin/python
 
 import sys
 import getopt

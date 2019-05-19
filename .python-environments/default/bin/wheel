@@ -1,5 +1,4 @@
-#!/Users/togai-r/.emacs.d/.python-environments/default/bin/python3.6
-
+#!/Users/garicchi/.emacs.d/.python-environments/default/bin/python3.5
 # -*- coding: utf-8 -*-
 import re
 import sys
