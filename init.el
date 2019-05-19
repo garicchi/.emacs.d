@@ -1205,5 +1205,6 @@
  '(helm-candidate-number ((t (:background "unspecified-bg" :foreground "black"))))
  '(font-lock-comment-face ((t (:foreground "brightblack"))))
  '(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
+ '(whitespace-empty ((t (:background "unspecified-bg"))))
  )
 
