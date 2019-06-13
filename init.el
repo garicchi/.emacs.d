@@ -195,7 +195,7 @@
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 
 ;; eww
-(setq eww-search-prefix "https://www.google.co.jp/search?q=")
+;;(setq eww-search-prefix "https://www.google.co.jp/search?q=")
 
 ;; ewwを複数起動
 (defun eww-mode-hook--rename-buffer ()
@@ -203,23 +203,28 @@
   (rename-buffer "eww" t))
 (add-hook 'eww-mode-hook 'eww-mode-hook--rename-buffer)
 
+(defun eww-mode-hook--search-words ()
+  (bind-key "C-x w" 'eww-search-words)
+  )
+(add-hook 'eww-mode-hook 'eww-mode-hook-search-words)
+
 ;; ewwの背景色をなんとかする
-(defvar eww-disable-colorize t)
-(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
-  (unless eww-disable-colorize
-    (funcall orig start end fg)))
-(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
-(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
-(defun eww-disable-color ()
-  "eww で文字色を反映させない"
-  (interactive)
-  (setq-local eww-disable-colorize nil)
-  (eww-reload))
-(defun eww-enable-color ()
-  "eww で文字色を反映させる"
-  (interactive)
-  (setq-local eww-disable-colorize t)
-  (eww-reload))
+;;(defvar eww-disable-colorize t)
+;;(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+;;  (unless eww-disable-colorize
+;;    (funcall orig start end fg)))
+;;(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+;;(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+;;(defun eww-disable-color ()
+;;  "eww で文字色を反映させない"
+;;  (interactive)
+;;  (setq-local eww-disable-colorize nil)
+;;  (eww-reload))
+;;(defun eww-enable-color ()
+;;  "eww で文字色を反映させる"
+;;  (interactive)
+;;  (setq-local eww-disable-colorize t)
+;;  (eww-reload))
 
 ;; window-resizerコマンド - ウインドウをリサイズできるようにする
 (defun window-resizer ()
@@ -566,7 +571,7 @@
   (doom-themes-visual-bell-config)
   
   ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
+  ;;(doom-themes-neotree-config)
   ;; or for treemacs users
   (doom-themes-treemacs-config)
   
@@ -782,8 +787,18 @@
 
 ;; go-mode
 (use-package go-mode
-  :ensure t)
+  :ensure t
+  :config
+  (defun set-gopath ()
+    (interactive)
+    (setenv "GOPATH"
+            (shell-command-to-string
+             (concat "echo $(cd $(dirname $(find " (message default-directory) " -maxdepth 3 -name 'Gopkg.toml'))/../../;pwd)")
+             )
 
+    )
+  )
+)
 ;; web-mode
 (use-package web-mode
   :ensure t)
@@ -799,6 +814,13 @@
 ;; json-mode
 (use-package json-mode
   :ensure t)
+
+;; lua-mode
+(use-package lua-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  )
 
 ;; php-mode
 (use-package php-mode
@@ -964,8 +986,12 @@
 ;;
 
 ;; ウインドウ分割
-(bind-key* "C-d" 'other-window)
-(bind-key* "C-f" 'other-window)
+(defun other-window-back ()
+  (interactive)
+  (other-window -1)
+  )
+(bind-key* "C-d" 'other-window-back)
+(bind-key* "C-f" 'other-window-back)
 
 (bind-key* "C-x l" 'windmove-left)
 (bind-key* "C-x :" 'windmove-right)
@@ -1064,7 +1090,7 @@
  (font-lock-function-name-face 
   (
    (t 
-    (:foreground "magenta"))))
+    (:foreground "yellow"))))
  '
  (font-lock-keyword-face 
   (
@@ -1207,5 +1233,6 @@
  '(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
  '(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
  '(whitespace-empty ((t (:background "unspecified-bg"))))
+ '(font-lock-comment-face ((t (:foreground "brightblack"))))
  )
 
