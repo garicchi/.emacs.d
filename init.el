@@ -314,9 +314,14 @@
 
 ;; package.elを有効化
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("gnu" . "http://elpa.gnu.org/packages/"))  
+(add-to-list 'package-archives
+             '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/") t)
 (fset 'package-desc-vers 'package--ac-desc-version)
 (package-initialize)
 
@@ -361,23 +366,12 @@
 ;;  (nyan-start-animation)
 ;;  )
 
-(use-package wttrin
+(use-package csv-mode
   :ensure t
+  :bind ("C-c a" . csv-align-fields)
   :config
-  (setq wttrin-default-cities '("Tokyo"))
-  (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
+  (setq indent-tabs-mode t)
   )
-
-(use-package fireplace
-  :ensure t
-  :config
-  )
-
-(use-package selectric-mode
-  :ensure t
-  :config
-  )
-
 
 ;; 正規表現検索をビジュアル的に
 (use-package visual-regexp
@@ -501,7 +495,7 @@
 ;;  (doom-modeline-minor-modes nil)
 ;;  :hook (after-init . doom-modeline-mode)
 ;;      )
-;;
+
 ;; flycheckとかでポップアップしてくれる
 (use-package popup
   :ensure t)
@@ -520,7 +514,7 @@
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
   (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
-  (setq neo-vc-integration '(face char))
+  ;;(setq neo-vc-integration '(face char))
   (setq neo-toggle-window-keep-p t)
   
   (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
@@ -546,39 +540,6 @@
 (use-package imenu-list
   :ensure t
   )
-
-
-;;
-;; color theme
-;;
-
-;; spacemacsのテーマ。とてもよい
-;;(use-package spacemacs-theme
-;;  :defer t
-;;  :init (load-theme 'spacemacs-dark t)
-;;  )
-;;
-(use-package doom-themes
-  :ensure t
-  :init (load-theme 'doom-nord
-                    t)
-  :custom
-  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
-  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  :config
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;;(doom-themes-neotree-config)
-  ;; or for treemacs users
-  (doom-themes-treemacs-config)
-  
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
-  )
-
 
 (use-package which-key
   :ensure t
@@ -894,25 +855,9 @@
                            tabs           ; タブ
                            spaces         ; スペース
                            empty          ; 先頭/末尾の空行
-                                        ;space-mark     ; 表示のマッピング
+                           space-mark     ; 表示のマッピング
                            tab-mark
                            ))
-  (defvar my/bg-color "unspecified-bg")
-  (set-face-attribute 'whitespace-trailing nil
-                      ;;:background my/bg-color
-                      :foreground "DeepPink"
-                      :underline t)
-  (set-face-attribute 'whitespace-tab nil
-                      ;;:background my/bg-color
-                      :foreground "#4c566a"
-                      :underline nil)
-  (set-face-attribute 'whitespace-space nil
-                      ;;:background my/bg-color
-                      :foreground "GreenYellow"
-                      :weight 'bold)
-  (set-face-attribute 'whitespace-empty nil
-                      ;;:background my/bg-color
-                      )
   :init (global-whitespace-mode t)
   )
 
@@ -1065,174 +1010,97 @@
 ;; custom set faces
 ;;
 ;;
-(custom-set-faces
- '
- (default 
-   (
-    (t 
-     (:inherit nil :stipple nil :background "unspecified-bg" :foreground "unspecified-fg" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 1 :width normal :foundry "default" :family "default"))))
- '
- (all-the-icons-blue 
-  (
-   (t 
-    (:foreground "blue"))))
- '
- (doom-neotree-dir-face 
-  (
-   (t 
-    (:foreground "magenta"))))
- '
- (font-lock-doc-face 
-  (
-   (t 
-    (:inherit font-lock-comment-face :foreground "brightblack"))))
- '
- (font-lock-function-name-face 
-  (
-   (t 
-    (:foreground "yellow"))))
- '
- (font-lock-keyword-face 
-  (
-   (t 
-    (:foreground "blue"))))
- '
- (font-lock-negation-char-face 
-  (
-   (t 
-    (:inherit bold :foreground "blue"))))
- '
- (font-lock-preprocessor-face 
-  (
-   (t 
-    (:inherit bold :foreground "blue"))))
- '
- (font-lock-string-face 
-  (
-   (t 
-    (:foreground "green"))))
- '
- (font-lock-type-face 
-  (
-   (t 
-    (:foreground "yellow"))))
- '
- (helm-ff-prefix 
-  (
-   (t 
-    (:foreground "red"))))
- '
- (helm-grep-match 
-  (
-   (t 
-    (:foreground "red"))))
- '
- (helm-match 
-  (
-   (t 
-    (:inherit bold :foreground "blue"))))
- '
- (helm-selection 
-  (
-   (t 
-    (:inherit bold :background "red"))))
- '
- (helm-source-header 
-  (
-   (t 
-    (:background "magenta" :foreground "#525252"))))
- '
- (highlight 
-  (
-   (t 
-    (:background "red" :foreground "black"))))
- '
- (lazy-highlight 
-  (
-   (t 
-    (:background "red" :foreground "white" :weight bold))))
- '
- (line-number 
-  (
-   (t 
-    (:inherit default :foreground "brightblack" :strike-through nil :underline nil :slant normal :weight normal))))
- '
- (linum 
-  (
-   (t 
-    (:inherit default :foreground "brightblack" :strike-through nil :underline nil :slant normal :weight normal))))
- '
- (mode-line 
-  (
-   (t 
-    (:background "unspecified-bg" :box nil))))
- '
- (neo-dir-link-face 
-  (
-   (t 
-    (:foreground "magenta"))))
- '
- (neo-expand-btn-face 
-  (
-   (t 
-    (:foreground "magent"))))
- '
- (neo-root-dir-face 
-  (
-   (t 
-    (:foreground "green" :box 4))))
- '
- (neo-vc-added-face 
-  (
-   (t 
-    (:foreground "green"))))
- '
- (neo-vc-default-face 
-  (
-   (t 
-    (:foreground "white"))))
- '
- (neo-vc-ignored-face 
-  (
-   (t 
-    (:foreground "brightblack"))))
- '
- (region 
-  (
-   (t 
-    (:background "red"))))
- '
- (vertical-border 
-  (
-   (t 
-    (:background "unspecified-bg" :foreground "brightblack"))))
- '
- (whitespace-tab 
-  (
-   (t 
-    (:background "unspecified-bg" :foreground "#4c566a" :underline nil))))
- '
- (swiper-isearch-current-match ((t (:background "red" :foreground "white"))))
 
- '(swiper-line-face ((t (:background "red" :foreground "black"))))
- '(doom-neotree-file-face ((t (:foreground "unspecified-fg"))))
- '(doom-neotree-text-file-face ((t (:foreground "unspecified-fg"))))
- '(helm-ff-file ((t (:foreground "unspecified-fg"))))
- '(markdown-code-face ((t (:background "unspecified-bg"))))
- '(markdown-header-face ((t (:inherit bold :foreground "blue"))))
- '(powerline-active1 ((t (:background "magenta" :foreground "black"))))
- '(powerline-active2 ((t (:inherit mode-line :background "magenta" :foreground "#dfdfdf"))))
- '(powerline-inactive1 ((t (:inherit mode-line-inactive :background "black"))))
- '(powerline-inactive2 ((t (:inherit mode-line-inactive :background "black"))))
- '(font-lock-builtin-face ((t (:foreground "cyan"))))
- '(font-lock-constant-face ((t (:foreground "magenta"))))
- '(font-lock-variable-name-face ((t (:foreground "magenta"))))
- '(whitespace-space ((t (:background "unspecified-bg" :foreground "GreenYellow" :weight bold))))
- '(helm-candidate-number ((t (:background "unspecified-bg" :foreground "black"))))
- '(font-lock-comment-face ((t (:foreground "brightblue"))))
- '(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
- '(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
- '(whitespace-empty ((t (:background "unspecified-bg"))))
- '(font-lock-comment-face ((t (:foreground "brightblack"))))
- )
+(use-package doom-themes
+  :ensure t
+  :init
+  (load-theme 'doom-nord t)
 
+  :custom
+  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;;(doom-themes-neotree-config)
+  ;; or for treemacs users
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
+
+  )
+
+  (let ((my-bg "#272c35")
+        (my-fg "#b0b1a7")
+        (my-red "#da5673")
+        (my-blue "#5cabdc")
+        (my-magenta "#b595cf")
+        (my-yellow "#eebf35")
+        (my-black "#434944")
+        (my-green "#8cc16d")
+        (my-cyan "#44a9ba")
+        (my-white "#b0b1a7")
+        (my-brightblack "#6c6d6b")
+        (my-brightblue "#126b8c")
+        )
+    (custom-theme-set-faces
+     'doom-nord
+     `(default ((t (:background ,my-bg :foreground ,my-fg :weight normal :height 1 :width normal :foundry "default" :family "default"))))
+     `(all-the-icons-blue ((t (:foreground ,my-blue))))
+     `(doom-neotree-dir-face ((t (:foreground ,my-magenta))))
+     `(font-lock-doc-face ((t (:inherit font-lock-comment-face :foreground ,my-brightblack))))
+     `(font-lock-function-name-face ((t (:foreground ,my-yellow))))
+     `(font-lock-keyword-face ((t (:foreground ,my-blue))))
+     `(font-lock-negation-char-face ((t (:inherit bold :foreground ,my-blue))))
+     `(font-lock-preprocessor-face ((t (:inherit bold :foreground ,my-blue))))
+     `(font-lock-string-face ((t (:foreground ,my-green))))
+     `(font-lock-type-face ((t (:foreground ,my-yellow))))
+     `(helm-ff-prefix ((t (:foreground ,my-red))))
+     `(helm-grep-match ((t (:foreground ,my-red))))
+     `(helm-match ((t (:inherit bold :foreground ,my-blue))))
+     `(helm-selection ((t (:inherit bold :background ,my-red))))
+     `(helm-source-header ((t (:background ,my-magenta :foreground "#525252"))))
+     `(highlight ((t (:background ,my-red :foreground ,my-black))))
+     `(lazy-highlight ((t (:background ,my-red :foreground ,my-white :weight bold))))
+     `(line-number ((t (:inherit default :foreground ,my-brightblack :strike-through nil :underline nil :slant normal :weight normal))))
+     `(linum ((t (:inherit default :foreground ,my-brightblack :strike-through nil :underline nil :slant normal :weight normal))))
+     `(mode-line ((t (:background "unspecified-bg" :box nil))))
+     `(neo-dir-link-face ((t (:foreground ,my-magenta))))
+     `(neo-expand-btn-face ((t (:foreground ,my-magenta))))
+     `(neo-root-dir-face ((t (:foreground ,my-green))))
+     `(neo-vc-added-face ((t (:foreground ,my-green))))
+     `(neo-vc-default-face ((t (:foreground ,my-white))))
+     `(neo-vc-ignored-face ((t (:foreground ,my-brightblack))))
+     `(region ((t (:background ,my-red))))
+     `(vertical-border ((t (:background "unspecified-bg" :foreground ,my-brightblack))))
+     `(swiper-isearch-current-match ((t (:background ,my-red :foreground ,my-white))))
+     `(swiper-line-face ((t (:background ,my-red :foreground ,my-black))))
+     `(doom-neotree-file-face ((t (:foreground "unspecified-fg"))))
+     `(doom-neotree-text-file-face ((t (:foreground "unspecified-fg"))))
+     `(helm-ff-file ((t (:foreground "unspecified-fg"))))
+     `(markdown-code-face ((t (:background "unspecified-bg"))))
+     `(markdown-header-face ((t (:inherit bold :foreground ,my-blue))))
+     `(powerline-active1 ((t (:background ,my-magenta :foreground ,my-black))))
+     `(powerline-active2 ((t (:inherit mode-line :background ,my-magenta :foreground "#dfdfdf"))))
+     `(powerline-inactive1 ((t (:inherit mode-line-inactive :background ,my-black))))
+     `(powerline-inactive2 ((t (:inherit mode-line-inactive :background ,my-black))))
+     `(font-lock-builtin-face ((t (:foreground ,my-cyan))))
+     `(font-lock-constant-face ((t (:foreground ,my-magenta))))
+     `(font-lock-variable-name-face ((t (:foreground ,my-magenta))))
+     `(helm-candidate-number ((t (:background "unspecified-bg" :foreground ,my-black))))
+     `(font-lock-comment-face ((t (:foreground ,my-brightblue))))
+     `(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
+     `(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
+     `(whitespace-tab ((t (:background "unspecified-bg" :foreground ,my-cyan))))
+     `(whitespace-space ((t (:background "unspecified-bg" :foreground ,my-black))))
+     )
+    )
+
+
+
+;; これがないとGUIがバグる
+(custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
