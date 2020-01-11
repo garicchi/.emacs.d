@@ -514,7 +514,7 @@
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t)
   (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
-  ;;(setq neo-vc-integration '(face char))
+  (setq neo-vc-integration nil)
   (setq neo-toggle-window-keep-p t)
   
   (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
@@ -629,6 +629,17 @@
   :ensure t
   :init (global-anzu-mode +1)
   )
+
+(use-package slime-company
+  :ensure t
+  )
+(use-package slime
+  :config
+  (setq inferior-lisp-program "/usr/local/bin/clisp")
+  (setq slime-contribs '(slime-fancy))
+  :init
+  (slime-setup '(slime-fancy slime-company))
+  :ensure t)
 
 ;; 単語にカーソルを置くと同じ単語をハイライトしてくれる
 (use-package highlight-symbol
@@ -846,6 +857,13 @@
   :bind* ("C-x m" . magit-status)
   )
 
+;; typescript mode
+(use-package typescript-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+  )
+
 ;; 空白を可視化
 (use-package whitespace
   :config
@@ -887,8 +905,8 @@
   :config
   ;;(setq dumb-jump-selector 'ivy)
   (setq dumb-jump-selector 'helm)
-  (bind-key* "C-x d" 'dumb-jump-go)
-  (bind-key* "C-x r" 'dumb-jump-back)
+  (bind-key* "C-d" 'dumb-jump-go)
+  (bind-key* "C-r" 'dumb-jump-back)
   :ensure t
   )
 
@@ -935,7 +953,6 @@
   (interactive)
   (other-window -1)
   )
-(bind-key* "C-d" 'other-window-back)
 (bind-key* "C-f" 'other-window-back)
 
 (bind-key* "C-x l" 'windmove-left)
@@ -948,7 +965,7 @@
 (bind-key* "C-x SPC" 'rectangle-mark-mode)
 
 ;; 置換コマンド
-(bind-key* "C-r" 'vr/replace)
+(bind-key* "C-x r" 'vr/replace)
 
 ;; スキップ移動
 (bind-key* "M-<down>" (kbd "C-u 5 <down>"))
@@ -987,7 +1004,7 @@
 (defun pr-show ()
   "Open PullRequest"
   (interactive)
-  (shell-command (concat "source ~/.order66/env.sh&&pr " (buffer-file-name) " " (number-to-string (line-number-at-pos))))
+  (shell-command (concat "source ~/config/env.sh&&pr " (buffer-file-name) " " (number-to-string (line-number-at-pos))))
   )
 
 (bind-key* "C-x p" 'pr-show)
