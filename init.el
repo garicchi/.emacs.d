@@ -72,7 +72,6 @@
 ;; recentfの履歴を10000にする
 (setq recentf-max-saved-items 1000)
 
-;;
 (setq recentf-exclude '(".recentf"))
 
 (setq recentf-auto-cleanup 'never)
@@ -99,6 +98,14 @@
 (setq x-select-enable-clipboard t)
 
 (setq mac-option-key-is-meta t)
+
+;; scratchバッファを自動保存する
+(add-hook 'emacs-startup-hook
+      '(lambda ()
+         (with-current-buffer "*scratch*"
+           (auto-save-mode)
+           (set (make-local-variable 'auto-save-timeout) 10)
+           (set (make-local-variable 'auto-save-interval) 20))))
 
 ;; system-type predicates
 ;; from http://d.hatena.ne.jp/tomoya/20090807/1249601308
@@ -131,8 +138,6 @@
         )
   )
 
-
-
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
 (setq-default truncate-partial-width-windows nil)
@@ -156,19 +161,6 @@
   (load custom-file))
 ;; ファイル名保管で大文字小文字の違いを無視する
 (setq completion-ignore-case t)
-
-;; 起動時のフレーム設定
-;;(setq initial-frame-alist
-;;   (append (list
-;;      '(top . 0)
-;;      '(left . 0)
-;;      '(width . 800)
-;;      '(height . 600)
-;;)
-;;initial-frame-alist
-;;)
-;;   )
-;;(setq default-frame-alist initial-frame-alist)
 
 ;; 起動時に分割
 ;;(setq w (selected-window))
@@ -358,13 +350,6 @@
   :ensure t
   :bind* ("C-c C-m" . mc/mark-all-like-this)
   )
-
-;;(use-package nyan-mode
-;;  :ensure t
-;;  :init
-;;  (nyan-mode)
-;;  (nyan-start-animation)
-;;  )
 
 (use-package csv-mode
   :ensure t
@@ -625,21 +610,21 @@
   )
 
 ;; 検索時に一致した数をモードラインに出してくれる
-(use-package anzu
-  :ensure t
-  :init (global-anzu-mode +1)
-  )
+;;(use-package anzu
+;;  :ensure t
+;;  :init (global-anzu-mode +1)
+;;  )
 
-(use-package slime-company
-  :ensure t
-  )
-(use-package slime
-  :config
-  (setq inferior-lisp-program "/usr/local/bin/clisp")
-  (setq slime-contribs '(slime-fancy))
-  :init
-  (slime-setup '(slime-fancy slime-company))
-  :ensure t)
+;;(use-package slime-company
+;;  :ensure t
+;;  )
+;;(use-package slime
+;;  :config
+;;  (setq inferior-lisp-program "/usr/local/bin/clisp")
+;;  (setq slime-contribs '(slime-fancy))
+;;  :init
+;;  (slime-setup '(slime-fancy slime-company))
+;;  :ensure t)
 
 ;; 単語にカーソルを置くと同じ単語をハイライトしてくれる
 (use-package highlight-symbol
@@ -711,11 +696,6 @@
   :init (helm-descbinds-mode)
   )
 
-;; helmで高速ファイル中身サーチ(ag)
-(use-package helm-ag
-  :ensure t
-  )
-
 ;; helmでgit grep
 (use-package helm-git-grep
   :ensure t
@@ -746,16 +726,16 @@
 ;;  )
 ;;
 ;; companyのgo拡張
-(use-package company-go
-  :ensure t
-  :config
-  (setq company-idle-delay .3)
-  (setq company-echo-delay 0)
-  (setq company-begin-commands '(self-insert-command))
-  (add-hook 'go-mode-hook (lambda ()
-                          (set (make-local-variable 'company-backends) '(company-go))
-                          (company-mode)))
-  )
+;;(use-package company-go
+;;  :ensure t
+;;  :config
+;;  (setq company-idle-delay .3)
+;;  (setq company-echo-delay 0)
+;;  (setq company-begin-commands '(self-insert-command))
+;;  (add-hook 'go-mode-hook (lambda ()
+;;                          (set (make-local-variable 'company-backends) '(company-go))
+;;                          (company-mode)))
+;;  )
 
 ;; go-mode
 (use-package go-mode
@@ -886,19 +866,18 @@
   )
 
 ;; companyのjedi拡張
-(use-package company-jedi
-  :ensure t
-  )
-
-;; フォースを信じろ
-(use-package jedi
-  :ensure t
-  :config
-  (setq jedi:complete-on-dot t)
-  (bind-key "C-x d" 'jedi:goto-definition jedi-mode-map)
-  :init
-  (add-hook 'python-mode-hook 'jedi:setup)
-  )
+;;(use-package company-jedi
+;;  :ensure t
+;;  )
+;;
+;;(use-package jedi
+;;  :ensure t
+;;  :config
+;;  (setq jedi:complete-on-dot t)
+;;  (bind-key "C-x d" 'jedi:goto-definition jedi-mode-map)
+;;  :init
+;;  (add-hook 'python-mode-hook 'jedi:setup)
+;;  )
 
 ;; それっぽい定義にジャンプしてくれる
 (use-package dumb-jump
