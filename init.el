@@ -75,9 +75,6 @@
 (setq recentf-exclude '(".recentf"))
 
 (setq recentf-auto-cleanup 'never)
-(setq recentf-auto-save-timer
-      (run-with-idle-timer 30 t 'recentf-save-list)
-      )
 
 ;; リージョンに上書き
 (delete-selection-mode t)
@@ -98,14 +95,6 @@
 (setq x-select-enable-clipboard t)
 
 (setq mac-option-key-is-meta t)
-
-;; scratchバッファを自動保存する
-(add-hook 'emacs-startup-hook
-      '(lambda ()
-         (with-current-buffer "*scratch*"
-           (auto-save-mode)
-           (set (make-local-variable 'auto-save-timeout) 10)
-           (set (make-local-variable 'auto-save-interval) 20))))
 
 ;; system-type predicates
 ;; from http://d.hatena.ne.jp/tomoya/20090807/1249601308
@@ -325,6 +314,10 @@
 
 ;; neotreeのいい感じのアイコン
 (use-package all-the-icons
+  :ensure t)
+
+(use-package persistent-scratch
+  :init (persistent-scratch-setup-default)
   :ensure t)
 
 ;; undoをツリー表示してくれるやつ
