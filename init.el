@@ -138,6 +138,27 @@
         )
   )
 
+(when (eq system-type 'gnu/linux)
+  (defvar prev-yanked-text nil "*previous yanked text")
+  (setq interprogram-cut-function
+        (lambda (text &optional push)
+          (let ((process-connection-type nil))
+            (let ((proc (start-process "xsel" "*Messages*" "/usr/bin/xsel" "--clipboard" "--input")))
+              (process-send-string proc text)
+              (process-send-eof proc)))
+          )
+        )
+
+  (setq interprogram-paste-function
+        (lambda ()
+          (let ((text (shell-command-to-string "xsel --clipboard --output")))
+            (if (string= prev-yanked-text text)
+                nil
+              (setq prev-yanked-text text)))
+          )
+        )
+  )
+
 ;; はみ出した表示をウインドウの右端で折り返さない
 (setq-default truncate-lines nil)
 (setq-default truncate-partial-width-windows nil)
@@ -295,7 +316,8 @@
 
 (defun config-sh-mode ()
   (setq indent-tabs-mode nil 
-        c-basic-offset 4) 
+        sh-basic-offset 2
+        sh-indentation 2)
 )
 (add-hook 'sh-mode-hook 'config-sh-mode)
 
@@ -582,8 +604,8 @@
   (eval-after-load 'flycheck
     '(custom-set-variables
       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-  (add-hook 'text-mode-hook 'flyspell-mode)
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  ;;(add-hook 'text-mode-hook 'flyspell-mode)
+  ;;(add-hook 'prog-mode-hook 'flyspell-prog-mode)
   )
 
 ;; コード補完とかしてくれる
