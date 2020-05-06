@@ -1,7 +1,6 @@
 ;;
 ;;   common setting
 ;;
-
 ;; 独自のelispを入れるパスを設定
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
@@ -193,7 +192,7 @@
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 (add-hook 'java-mode-hook       'hs-minor-mode)
 (add-hook 'lisp-mode-hook       'hs-minor-mode)
-(add-hook 'python-mode-hook       'hs-minor-mode)
+;;(add-hook 'python-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 
 ;; eww
@@ -529,14 +528,6 @@
   (neotree)
   )
 
-;; 複数開けるターミナル
-(use-package multi-term
-  :ensure t
-  :config
-  (setq multi-term-program shell-file-name)
-  (bind-key "C-x t" 'multi-term)
-  )
-
 (use-package imenu-list
   :ensure t
   )
@@ -590,16 +581,16 @@
   )
 
 ;; 構文チェックとかしてくれる
-(use-package flycheck
-  :ensure t
-  :config
-  (add-hook 'after-init-hook #'global-flycheck-mode) ; flycheck-pos-tip
-  (eval-after-load 'flycheck
-    '(custom-set-variables
-      '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+;(use-package flycheck
+;  :ensure t
+;  :config
+;  (add-hook 'after-init-hook #'global-flycheck-mode) ; flycheck-pos-tip
+;  (eval-after-load 'flycheck
+;    '(custom-set-variables
+;      '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
   ;;(add-hook 'text-mode-hook 'flyspell-mode)
   ;;(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  )
+;  )
 
 ;; コード補完とかしてくれる
 (use-package company
@@ -956,6 +947,7 @@
 
 (bind-key* "C-x p" 'previous-buffer)
 
+(bind-key* "C-x t" 'string-rectangle)
 (bind-key* "C-x SPC" 'rectangle-mark-mode)
 
 ;; 置換コマンド
