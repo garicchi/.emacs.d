@@ -17,6 +17,7 @@
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120 124 128))
 (global-set-key (kbd "<backtab>")  'backtab-to-tab-stop)
+
 ;; backtab
 (defun backtab-to-tab-stop ()
   "Do back to previous tab-stop"
@@ -185,16 +186,6 @@
 ;;; モードラインに時間を表示する
 (display-time)
 
-;; コードの折りたたみを有効にする
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-(add-hook 'groovy-mode-hook 'hs-minor-mode)
-(add-hook 'c-mode-common-hook   'hs-minor-mode)
-(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
-(add-hook 'java-mode-hook       'hs-minor-mode)
-(add-hook 'lisp-mode-hook       'hs-minor-mode)
-;;(add-hook 'python-mode-hook       'hs-minor-mode)
-(add-hook 'sh-mode-hook         'hs-minor-mode)
-
 ;; eww
 ;;(setq eww-search-prefix "https://www.google.co.jp/search?q=")
 
@@ -268,23 +259,6 @@
       (maximize-window))
     (setq is-window-maximized (not is-window-maximized))))
 
-;; rename機能
-;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
-(defun rename-file-and-buffer (new-name)
-  "Renames both current buffer and file it's visiting to NEW-NAME."
-  (interactive "sNew name: ")
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (if (not filename)
-        (message "Buffer '%s' is not visiting a file!" name)
-      (if (get-buffer new-name)
-          (message "A buffer named '%s' already exists!" new-name)
-        (progn
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil))))))
-
 ;; scratchの初期メッセージ消去
 (setq initial-scratch-message "")
 
@@ -302,6 +276,7 @@
 ;; diffのバッファを上下ではなく左右に並べる
 (setq ediff-split-window-function 'split-window-horizontally)
 
+;; sh-mode
 (defun config-sh-mode ()
   (setq indent-tabs-mode nil 
         sh-basic-offset 2
@@ -337,6 +312,7 @@
 (use-package all-the-icons
   :ensure t)
 
+;; scratchを保持
 (use-package persistent-scratch
   :init (persistent-scratch-setup-default)
   :ensure t)
@@ -464,13 +440,13 @@
   ;;(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
   )
 
-(setq-default
- header-line-format
- '(""
-   (:propertize (:eval (shorten-directory default-directory 30))
-                face mode-line-folder-face)
-   (:propertize "%b"
-                face mode-line-filename-face)))
+;;(setq-default
+;; header-line-format
+;; '(""
+;;   (:propertize (:eval (shorten-directory default-directory 30))
+;;                face mode-line-folder-face)
+;;   (:propertize "%b"
+;;                face mode-line-filename-face)))
 
 (defun shorten-directory (dir max-length)
   "Show up to `max-length' characters of a directory name `dir'."
@@ -499,13 +475,6 @@
 (use-package popup
   :ensure t)
 
-;; 非アクティブウインドウが暗くなる
-;;(use-package dimmer
-;;  :ensure t
-;;  :init (dimmer-mode)
-;;  )
-
-
 ;; 左側にでるファイラー
 (use-package neotree
   :ensure t
@@ -528,47 +497,9 @@
   (neotree)
   )
 
-(use-package imenu-list
-  :ensure t
-  )
-
 (use-package which-key
   :ensure t
   :init (which-key-mode)
-  )
-
-;; バッファをタブみたいに表示してくれるやつ
-(use-package tabbar
-  :ensure t
-  :config
-  (tabbar-mwheel-mode nil)                  ;; マウスホイール無効
-  (setq tabbar-buffer-groups-function nil)  ;; グループ無効
-  (setq tabbar-use-images nil)              ;; 画像を使わない
-  ;; 左側のボタンを消す
-  (dolist (btn '(tabbar-buffer-home-button
-                 tabbar-scroll-left-button
-                 tabbar-scroll-right-button))
-    (set btn (cons (cons "" nil)
-                   (cons "" nil))))
-
-
-  ;; タブのセパレーターの長さ
-  (setq tabbar-separator '(1.0))
-  ;; 表示するバッファ
-  (defun my-tabbar-buffer-list ()
-    (delq nil
-          (mapcar #'(lambda (b)
-                      (cond
-                       ;; Always include the current buffer.
-                       ((eq (current-buffer) b) b)
-                       ((buffer-file-name b) b)
-                       ((char-equal ?\  (aref (buffer-name b) 0)) nil)
-                       ((equal "*scratch*" (buffer-name b)) b) ; *scratch*バッファは表示する
-                       ((char-equal ?* (aref (buffer-name b) 0)) nil) ; それ以外の * で始まるバッファは表示しない
-                       ((buffer-live-p b) b)))
-                  (buffer-list))))
-                                        ;(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
-  :init (tabbar-mode 0)
   )
 
 ;; markdownをリアルタイムにプレビューしてくれる
@@ -714,10 +645,6 @@
 (use-package helm-ls-git
   :ensure t
   )
-
-;; flycheckでポップアップウインドウを出してくれる
-(use-package flycheck-pos-tip
-  :ensure t)
 
 ;; git diffを表示するやつ
 ;;(use-package git-gutter+
@@ -970,6 +897,8 @@
 
 (bind-key* "C-x C-b" 'buffer-menu)
 
+(bind-key* "C-b" nil)
+
 ;; eww
 (bind-key* "C-x w" 'eww)
 
@@ -986,14 +915,6 @@
 ;; web-mode
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue?$"     . web-mode))
-
-(defun pr-show ()
-  "Open PullRequest"
-  (interactive)
-  (shell-command (concat "source ~/config/env.sh&&pr " (buffer-file-name) " " (number-to-string (line-number-at-pos))))
-  )
-
-(bind-key* "C-x p" 'pr-show)
 
 (defun run-mode ()
   "chdmo u+x"
@@ -1014,95 +935,16 @@
 ;;
 ;;
 
-(use-package doom-themes
+(use-package nord-theme
   :ensure t
   :init
-  (load-theme 'doom-nord t)
-
-  :custom
-  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
-  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
+  (load-theme 'nord t)
   :config
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;;(doom-themes-neotree-config)
-  ;; or for treemacs users
-  (doom-themes-treemacs-config)
-  
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
-
+  (custom-theme-set-faces
+       'nord
+       '(mode-line-inactive ((t (:background "brightblue" :foreground "#D8DEE9"))))
+       '(region ((t (:background "brightblue")))))
   )
-
-  (let ((my-bg "#272c35")
-        (my-fg "#b0b1a7")
-        (my-red "#da5673")
-        (my-blue "#5cabdc")
-        (my-magenta "#b595cf")
-        (my-yellow "#eebf35")
-        (my-black "#434944")
-        (my-green "#8cc16d")
-        (my-cyan "#44a9ba")
-        (my-white "#b0b1a7")
-        (my-brightblack "#6c6d6b")
-        (my-brightblue "#126b8c")
-        )
-    (custom-theme-set-faces
-     'doom-nord
-     `(default ((t (:background ,my-bg :foreground ,my-fg :weight normal :height 1 :width normal :foundry "default" :family "default"))))
-     `(all-the-icons-blue ((t (:foreground ,my-blue))))
-     `(doom-neotree-dir-face ((t (:foreground ,my-magenta))))
-     `(font-lock-doc-face ((t (:inherit font-lock-comment-face :foreground ,my-brightblack))))
-     `(font-lock-function-name-face ((t (:foreground ,my-yellow))))
-     `(font-lock-keyword-face ((t (:foreground ,my-blue))))
-     `(font-lock-negation-char-face ((t (:inherit bold :foreground ,my-blue))))
-     `(font-lock-preprocessor-face ((t (:inherit bold :foreground ,my-blue))))
-     `(font-lock-string-face ((t (:foreground ,my-green))))
-     `(font-lock-type-face ((t (:foreground ,my-yellow))))
-     `(helm-ff-prefix ((t (:foreground ,my-red))))
-     `(helm-grep-match ((t (:foreground ,my-red))))
-     `(helm-match ((t (:inherit bold :foreground ,my-blue))))
-     `(helm-selection ((t (:inherit bold :background ,my-red))))
-     `(helm-source-header ((t (:background ,my-magenta :foreground "#525252"))))
-     `(highlight ((t (:background ,my-red :foreground ,my-black))))
-     `(lazy-highlight ((t (:background ,my-red :foreground ,my-white :weight bold))))
-     `(line-number ((t (:inherit default :foreground ,my-brightblack :strike-through nil :underline nil :slant normal :weight normal))))
-     `(linum ((t (:inherit default :foreground ,my-brightblack :strike-through nil :underline nil :slant normal :weight normal))))
-     `(mode-line ((t (:background "unspecified-bg" :box nil))))
-     `(neo-dir-link-face ((t (:foreground ,my-magenta))))
-     `(neo-expand-btn-face ((t (:foreground ,my-magenta))))
-     `(neo-root-dir-face ((t (:foreground ,my-green))))
-     `(neo-vc-added-face ((t (:foreground ,my-green))))
-     `(neo-vc-default-face ((t (:foreground ,my-white))))
-     `(neo-vc-ignored-face ((t (:foreground ,my-brightblack))))
-     `(region ((t (:background ,my-red))))
-     `(vertical-border ((t (:background "unspecified-bg" :foreground ,my-brightblack))))
-     `(swiper-isearch-current-match ((t (:background ,my-red :foreground ,my-white))))
-     `(swiper-line-face ((t (:background ,my-red :foreground ,my-black))))
-     `(doom-neotree-file-face ((t (:foreground "unspecified-fg"))))
-     `(doom-neotree-text-file-face ((t (:foreground "unspecified-fg"))))
-     `(helm-ff-file ((t (:foreground "unspecified-fg"))))
-     `(markdown-code-face ((t (:background "unspecified-bg"))))
-     `(markdown-header-face ((t (:inherit bold :foreground ,my-blue))))
-     `(powerline-active1 ((t (:background ,my-magenta :foreground ,my-black))))
-     `(powerline-active2 ((t (:inherit mode-line :background ,my-magenta :foreground "#dfdfdf"))))
-     `(powerline-inactive1 ((t (:inherit mode-line-inactive :background ,my-black))))
-     `(powerline-inactive2 ((t (:inherit mode-line-inactive :background ,my-black))))
-     `(font-lock-builtin-face ((t (:foreground ,my-cyan))))
-     `(font-lock-constant-face ((t (:foreground ,my-magenta))))
-     `(font-lock-variable-name-face ((t (:foreground ,my-magenta))))
-     `(helm-candidate-number ((t (:background "unspecified-bg" :foreground ,my-black))))
-     `(font-lock-comment-face ((t (:foreground ,my-brightblue))))
-     `(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
-     `(mode-line-inactive ((t (:inherit mode-line :background "unspecified-bg"))))
-     `(whitespace-tab ((t (:background "unspecified-bg" :foreground ,my-cyan))))
-     `(whitespace-space ((t (:background "unspecified-bg" :foreground ,my-black))))
-     )
-    )
-
 
 
 ;; これがないとGUIがバグる
