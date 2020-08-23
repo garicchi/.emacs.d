@@ -529,6 +529,7 @@
   :init (global-company-mode) ; 全バッファで有効にする
   :config
   (setq company-idle-delay 0) ; デフォルトは0.5
+  (setq company-show-numbers nil)
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   (add-to-list 'company-backends 'company-edbi)
@@ -841,6 +842,9 @@
   (setq plantuml-options "-charset UTF-8")
   )
 
+
+(use-package company-tabnine :ensure t)
+
 ;; 分割ウインドウをいい感じの比率で制御してくれる
 ;;(use-package golden-ratio
 ;;  :ensure t
@@ -867,10 +871,16 @@
   )
 (bind-key* "C-f" 'other-window-back)
 
+(bind-key* "C-t" 'previous-buffer)
+
 (bind-key* "C-x l" 'windmove-left)
 (bind-key* "C-x :" 'windmove-right)
 (bind-key* "C-x p" 'windmove-up)
 (bind-key* "C-x ;" 'windmove-down)
+(bind-key* "C-x <left>" 'windmove-left)
+(bind-key* "C-x <up>" 'windmove-up)
+(bind-key* "C-x <right>" 'windmove-right)
+(bind-key* "C-x <down>" 'windmove-down)
 
 (bind-key* "C-x p" 'previous-buffer)
 
