@@ -187,7 +187,7 @@
 (display-time)
 
 ;; eww
-;;(setq eww-search-prefix "https://www.google.co.jp/search?q=")
+(setq eww-search-prefix "https://www.google.co.jp/search?q=")
 
 ;; ewwを複数起動
 (defun eww-mode-hook--rename-buffer ()
@@ -614,7 +614,6 @@
 
   ;; 下にウインドウとしてhelmを表示する
   (setq helm-default-display-buffer-functions '(display-buffer-in-atom-window))
-  
   (bind-key* "M-x" 'helm-M-x)
   (bind-key* "C-x x" 'helm-mini)
   (bind-key* "C-x C-x" 'helm-mini)
@@ -622,6 +621,7 @@
   (bind-key* "C-x b" 'helm-buffers-list)
   (bind-key* "C-x a" 'helm-do-grep-ag)
   (bind-key* "C-x i" 'helm-imenu)
+
   )
 
 ;; helm-M-xでキーバインドを表示してくれる
@@ -637,7 +637,10 @@
   :bind* ("C-x g" . helm-browse-project)
   :bind* ("C-x s" . helm-git-grep)
   :bind* ("C-f" . helm-git-grep-at-point)
+  :bind* ("<left>" . backward-char)
+  :bind* ("<right>" . forward-char)
   )
+(setq helm-git-grep-use-ioccur-style-keys nil)
 
 ;; helmでgit ls
 (use-package helm-ls-git
