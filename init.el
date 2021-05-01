@@ -291,8 +291,7 @@
 
 ;; package.elを有効化
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("gnu" . "http://elpa.gnu.org/packages/"))  
 (add-to-list 'package-archives
@@ -479,11 +478,12 @@
 (use-package neotree
   :ensure t
   :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq neo-theme (if (display-graphic-p) 'icons))
   (setq neo-show-hidden-files t)
   (setq neo-smart-open t) ;ウインドウを開くたびにcurrent fileのあるディレクトリを表示
   (setq neo-vc-integration nil)
   (setq neo-toggle-window-keep-p t)
+  (setq neo-autorefresh nil)
   
   (bind-key "C-c c" 'neotree-create-node neotree-mode-map)
   (bind-key "C-c d" 'neotree-delete-node neotree-mode-map)
@@ -537,9 +537,9 @@
   )
 
 ;; companyにアイコンとか表示してくれるっぽい
-(use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
+;(use-package company-box
+;  :ensure t
+;  :hook (company-mode . company-box-mode))
 
 ;; コードブロックごとにregionを作れる
 (use-package expand-region
@@ -575,8 +575,6 @@
 ;; 全てをインクリメンタルサーチ
 (use-package helm
   :ensure t
-  :init
-  (helm-mode t)
   :config
   ;; emacsのコマンドを検索可能に
   (defvar helm-source-emacs-commands
@@ -606,8 +604,6 @@
   (custom-set-variables
    '(helm-mini-default-sources '(helm-source-buffers-list
                                  helm-source-recentf
-                                 helm-source-ls-git
-                                 helm-source-files-in-current-dir
                                  helm-source-emacs-commands-history
                                  helm-source-emacs-commands
                                  )))
@@ -640,6 +636,7 @@
   :config
   :bind* ("C-x g" . helm-browse-project)
   :bind* ("C-x s" . helm-git-grep)
+  :bind* ("C-f" . helm-git-grep-at-point)
   )
 
 ;; helmでgit ls
@@ -717,18 +714,6 @@
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  )
-
-;; glsl-mode
-(use-package glsl-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.shader$" . glsl-mode))
-  )
-
-;; companyのglsl拡張
-(use-package company-glsl
-  :ensure t
   )
 
 ;; terraform0mode
@@ -869,7 +854,6 @@
   (interactive)
   (other-window -1)
   )
-(bind-key* "C-f" 'other-window-back)
 
 (bind-key* "C-t" 'previous-buffer)
 
